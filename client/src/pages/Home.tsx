@@ -24,6 +24,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
+import Header from "@/components/Header";
 
 // Background images - Mystical celestial theme
 const HERO_BG = "https://private-us-east-1.manuscdn.com/sessionFile/Vf2iwFJXfxabWANoxH8Y4R/sandbox/oAoxzsDB1OO28cezWUejbN-img-1_1770155958000_na1fn_bXlzdGljYWwtaGVyby1iZw.png?x-oss-process=image/resize,w_1920,h_1920/format,webp/quality,q_80&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvVmYyaXdGSlhmeGFiV0FOb3hIOFk0Ui9zYW5kYm94L29Bb3h6c0RCMU9PMjhjZXpXVWVqYk4taW1nLTFfMTc3MDE1NTk1ODAwMF9uYTFmbl9iWGx6ZEdsallXd3RhR1Z5YnkxaVp3LnBuZz94LW9zcy1wcm9jZXNzPWltYWdlL3Jlc2l6ZSx3XzE5MjAsaF8xOTIwL2Zvcm1hdCx3ZWJwL3F1YWxpdHkscV84MCIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc5ODc2MTYwMH19fV19&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=Fk0o7sgK9Csj9~KyI4F2T2fJJff8wXmETE3WvWe~WsWx1qJtWU8t9FAKjoTa8RJEgmJQtBFNhoDrTIp0Px1mfMNxn5-Ih~03ccjyLAmv~OpzsW1N6ANC23VBlv4Vspv1Cz0vn0tbf3audhiejE8hAulgfzdyQDiIgtMEva6XTFwiovfCS-mpTMwfTziBTAR13EafllIRL0ynt5u0ZYv1kPhcaqzp~yuQ3225hKrJB0Esbge~ccdkHMj8XKBVBb4wdLMLJToyN2~Qxg65Wtz8QlzDD8ZVKb-dt89sQHD~bYRdEHQ~-PJIr74JR1nILHZeTxDD343STS6vnuynIToV0w__";
@@ -179,58 +180,7 @@ export default function Home() {
       <AnimatedStars />
 
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-md border-b border-primary/20">
-        <div className="container flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary/30 flex items-center justify-center border border-primary/30">
-              <Sparkles className="w-5 h-5 text-primary" />
-            </div>
-            <span className="font-serif text-xl font-bold gold-text">Oráculo Místico</span>
-          </Link>
-          
-          <nav className="hidden md:flex items-center gap-6">
-            <Link href="/tarot/dia" className="text-sm text-white/80 hover:text-primary transition-colors">
-              Tarot
-            </Link>
-            <Link href="/numerologia" className="text-sm text-white/80 hover:text-primary transition-colors">
-              Numerologia
-            </Link>
-            <Link href="/horoscopo" className="text-sm text-white/80 hover:text-primary transition-colors">
-              Horóscopo
-            </Link>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            {isAuthenticated && user ? (
-              <>
-                <Link href="/perfil">
-                  <span className="text-sm text-white/70 hover:text-primary transition-colors cursor-pointer">
-                    Olá, <span className="text-primary font-semibold">{user.name || user.email}</span>
-                  </span>
-                </Link>
-                <Button 
-                  size="sm" 
-                  variant="outline"
-                  className="border-white/30 text-white hover:bg-white/10"
-                  onClick={handleLogout}
-                  disabled={logoutMutation.isPending}
-                >
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Sair
-                </Button>
-              </>
-            ) : (
-              <Button 
-                size="sm" 
-                className="bg-primary text-primary-foreground hover:bg-primary/90 border border-primary/50"
-                onClick={() => window.location.href = getLoginUrl()}
-              >
-                Entrar
-              </Button>
-            )}
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Hero Section with mystical background */}
       <section className="relative pt-24 pb-20 overflow-hidden z-10 min-h-[90vh] flex items-center">

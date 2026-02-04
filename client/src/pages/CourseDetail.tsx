@@ -62,6 +62,18 @@ export default function CourseDetail() {
     },
   });
 
+  const checkoutMutation = trpc.courses.checkout.useMutation({
+    onSuccess: (data) => {
+      if (data.checkoutUrl) {
+        toast.info("Redirecionando para o pagamento...");
+        window.open(data.checkoutUrl, "_blank");
+      }
+    },
+    onError: (error) => {
+      toast.error(error.message || "Erro ao iniciar checkout");
+    },
+  });
+
   const isEnrolled = enrollments?.some(e => e.courseId === course?.id);
   const completedLessons = progress?.filter(p => p.isCompleted).length || 0;
   const totalLessons = course?.totalLessons || 0;
@@ -80,8 +92,20 @@ export default function CourseDetail() {
       toast.error("Faça login para se matricular");
       return;
     }
-    if (course?.id) {
+    if (!course?.id) return;
+
+    // If course is free, enroll directly
+    if (course.isFree) {
       enrollMutation.mutate({ courseId: course.id });
+    } else {
+      // If course is paid, redirect to checkout
+      checkoutMutation.mutate({
+        courseId: course.id,
+        courseSlug: course.slug,
+        courseName: course.title,
+        courseDescription: course.description || "",
+        price: course.price || "0",
+      });
     }
   };
 

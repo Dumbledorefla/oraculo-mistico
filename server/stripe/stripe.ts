@@ -337,3 +337,72 @@ export async function createConsultationCheckoutSession(params: CreateConsultati
 
   return session.url || "";
 }
+
+
+/**
+ * Create a Stripe Checkout Session for Courses
+ */
+export interface CreateCourseCheckoutParams {
+  courseId: number;
+  courseSlug: string;
+  courseName: string;
+  courseDescription: string;
+  price: string;
+  userId: number;
+  userEmail: string;
+  userName: string;
+  origin: string;
+}
+
+export async function createCourseCheckoutSession(params: CreateCourseCheckoutParams): Promise<string> {
+  const {
+    courseId,
+    courseSlug,
+    courseName,
+    courseDescription,
+    price,
+    userId,
+    userEmail,
+    userName,
+    origin,
+  } = params;
+
+  // Convert price to cents
+  const priceInCents = Math.round(parseFloat(price) * 100);
+
+  // Create checkout session
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: [
+      {
+        price_data: {
+          currency: "brl",
+          product_data: {
+            name: courseName,
+            description: courseDescription || "Curso completo com acesso vitalício",
+          },
+          unit_amount: priceInCents,
+        },
+        quantity: 1,
+      },
+    ],
+    mode: "payment",
+    success_url: `${origin}/curso/${courseSlug}/sucesso?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${origin}/curso/${courseSlug}?cancelled=true`,
+    customer_email: userEmail,
+    client_reference_id: userId.toString(),
+    allow_promotion_codes: true,
+    metadata: {
+      type: "course",
+      user_id: userId.toString(),
+      customer_email: userEmail,
+      customer_name: userName,
+      course_id: courseId.toString(),
+      course_slug: courseSlug,
+      course_name: courseName,
+      price: price,
+    },
+  });
+
+  return session.url || "";
+}

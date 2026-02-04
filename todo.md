@@ -116,3 +116,33 @@
 - [ ] Implementar gestão de taromantes (em desenvolvimento)
 - [x] Criar relatório de vendas
 - [ ] Implementar sistema de comissões (em desenvolvimento)
+
+
+---
+
+## Fase 5 - Avaliações, Pagamentos de Cursos e UX
+
+### Sistema de Avaliações
+- [x] Criar componente de avaliação com estrelas
+- [x] Implementar avaliação de consultas realizadas
+- [ ] Implementar avaliação de cursos concluídos
+- [x] Exibir avaliações nos perfis de taromantes
+- [ ] Exibir avaliações nas páginas de cursos
+
+### Pagamento de Cursos
+- [x] Integrar checkout Stripe para cursos pagos
+- [ ] Criar página de sucesso de matrícula
+- [ ] Liberar acesso ao curso após pagamento
+- [ ] Exibir cursos comprados em Meus Produtos
+
+### Sistema de Notificações
+- [ ] Implementar notificações in-app (toast/bell)
+- [ ] Criar centro de notificações do usuário
+- [ ] Notificar sobre consultas agendadas
+- [ ] Notificar sobre novos cursos e promoções
+
+### Melhorias de UX
+- [x] Implementar menu mobile responsivo (hamburger)
+- [x] Adicionar submenu dropdown para categorias
+- [x] Melhorar navegação entre páginas
+- [ ] Adicionar breadcrumbs nas páginas internas

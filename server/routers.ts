@@ -45,7 +45,7 @@ import {
   updateLessonProgress,
   getUserLessonProgress
 } from "./db";
-import { createCheckoutSession, createConsultationCheckoutSession } from "./stripe/stripe";
+import { createCheckoutSession, createConsultationCheckoutSession, createCourseCheckoutSession } from "./stripe/stripe";
 
 export const appRouter = router({
   system: systemRouter,
@@ -607,6 +607,68 @@ export const appRouter = router({
           isCompleted: input.isCompleted,
           watchedSeconds: input.watchedSeconds,
         });
+      }),
+
+    checkout: protectedProcedure
+      .input(z.object({
+        courseId: z.number(),
+        courseSlug: z.string(),
+        courseName: z.string(),
+        courseDescription: z.string().optional(),
+        price: z.string(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (!ctx.user?.id || !ctx.user?.email) {
+          throw new Error("User not authenticated");
+        }
+
+        const origin = ctx.req.headers.origin || "https://chavedooraculo.com";
+
+        const checkoutUrl = await createCourseCheckoutSession({
+          courseId: input.courseId,
+          courseSlug: input.courseSlug,
+          courseName: input.courseName,
+          courseDescription: input.courseDescription || "",
+          price: input.price,
+          userId: ctx.user.id,
+          userEmail: ctx.user.email,
+          userName: ctx.user.name || "Cliente",
+          origin,
+        });
+
+        return { checkoutUrl };
+      }),
+  }),
+
+  // Reviews router
+  reviews: router({
+    create: protectedProcedure
+      .input(z.object({
+        consultationId: z.number(),
+        taromanteId: z.number(),
+        rating: z.number().min(1).max(5),
+        comment: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (!ctx.user?.id) {
+          throw new Error("User not authenticated");
+        }
+        return await createConsultationReview({
+          consultationId: input.consultationId,
+          userId: ctx.user.id,
+          taromanteId: input.taromanteId,
+          rating: input.rating,
+          comment: input.comment,
+          isPublic: true,
+        });
+      }),
+
+    getByTaromante: publicProcedure
+      .input(z.object({
+        taromanteId: z.number(),
+      }))
+      .query(async ({ input }) => {
+        return await getTaromanteReviews(input.taromanteId);
       }),
   }),
 });
