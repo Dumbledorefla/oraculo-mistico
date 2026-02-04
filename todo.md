@@ -85,3 +85,34 @@
 - [ ] Criar gestão de serviços e preços
 - [ ] Mostrar histórico de consultas
 - [ ] Exibir relatório financeiro
+
+
+---
+
+## Fase 4 - Painel do Taromante, Cursos e Admin
+
+### Painel do Taromante
+- [x] Criar página /painel-taromante com dashboard
+- [x] Implementar visualização de consultas agendadas
+- [x] Criar gestão de serviços e preços
+- [x] Mostrar calendário de disponibilidade editável
+- [x] Exibir histórico de consultas realizadas
+- [x] Criar relatório financeiro básico
+
+### Sistema de Cursos
+- [x] Criar tabela de cursos no banco de dados
+- [x] Criar tabela de módulos e aulas
+- [x] Criar tabela de progresso do aluno
+- [x] Implementar página /cursos com listagem
+- [x] Criar página de detalhes do curso
+- [x] Implementar player de vídeo/conteúdo
+- [x] Criar sistema de progresso e conclusão
+- [ ] Integrar pagamento para cursos pagos
+
+### Painel Administrativo
+- [x] Criar página /admin com dashboard
+- [x] Implementar listagem de usuários
+- [ ] Criar gestão de produtos (em desenvolvimento)
+- [ ] Implementar gestão de taromantes (em desenvolvimento)
+- [x] Criar relatório de vendas
+- [ ] Implementar sistema de comissões (em desenvolvimento)

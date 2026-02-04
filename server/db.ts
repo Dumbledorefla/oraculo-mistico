@@ -768,3 +768,278 @@ export async function createConsultationReview(review: InsertConsultationReview)
     throw error;
   }
 }
+
+
+// Get taromante by user ID (for taromante panel)
+export async function getTaromanteByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get taromante: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.select().from(taromantes).where(eq(taromantes.userId, userId)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get taromante by user ID:", error);
+    return undefined;
+  }
+}
+
+
+// ==================== COURSE QUERIES ====================
+
+import { 
+  courses, InsertCourse,
+  courseModules, InsertCourseModule,
+  courseLessons, InsertCourseLesson,
+  courseEnrollments, InsertCourseEnrollment,
+  lessonProgress, InsertLessonProgress
+} from "../drizzle/schema";
+
+export async function getAllCourses(activeOnly: boolean = true) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get courses: database not available");
+    return [];
+  }
+
+  try {
+    if (activeOnly) {
+      return await db.select().from(courses).where(eq(courses.isActive, true));
+    }
+    return await db.select().from(courses);
+  } catch (error) {
+    console.error("[Database] Failed to get courses:", error);
+    return [];
+  }
+}
+
+export async function getFeaturedCourses() {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get featured courses: database not available");
+    return [];
+  }
+
+  try {
+    return await db.select().from(courses).where(
+      and(
+        eq(courses.isFeatured, true),
+        eq(courses.isActive, true)
+      )
+    );
+  } catch (error) {
+    console.error("[Database] Failed to get featured courses:", error);
+    return [];
+  }
+}
+
+export async function getCourseBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get course: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.select().from(courses).where(eq(courses.slug, slug)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get course:", error);
+    return undefined;
+  }
+}
+
+export async function getCourseById(id: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get course: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.select().from(courses).where(eq(courses.id, id)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get course:", error);
+    return undefined;
+  }
+}
+
+export async function getCourseModules(courseId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get course modules: database not available");
+    return [];
+  }
+
+  try {
+    return await db.select().from(courseModules)
+      .where(eq(courseModules.courseId, courseId))
+      .orderBy(courseModules.orderIndex);
+  } catch (error) {
+    console.error("[Database] Failed to get course modules:", error);
+    return [];
+  }
+}
+
+export async function getModuleLessons(moduleId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get module lessons: database not available");
+    return [];
+  }
+
+  try {
+    return await db.select().from(courseLessons)
+      .where(eq(courseLessons.moduleId, moduleId))
+      .orderBy(courseLessons.orderIndex);
+  } catch (error) {
+    console.error("[Database] Failed to get module lessons:", error);
+    return [];
+  }
+}
+
+export async function getCourseLessons(courseId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get course lessons: database not available");
+    return [];
+  }
+
+  try {
+    return await db.select().from(courseLessons)
+      .where(eq(courseLessons.courseId, courseId))
+      .orderBy(courseLessons.orderIndex);
+  } catch (error) {
+    console.error("[Database] Failed to get course lessons:", error);
+    return [];
+  }
+}
+
+export async function getLessonById(lessonId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get lesson: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.select().from(courseLessons).where(eq(courseLessons.id, lessonId)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get lesson:", error);
+    return undefined;
+  }
+}
+
+export async function enrollUserInCourse(enrollment: InsertCourseEnrollment) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot enroll user: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.insert(courseEnrollments).values(enrollment);
+    return result;
+  } catch (error) {
+    console.error("[Database] Failed to enroll user:", error);
+    throw error;
+  }
+}
+
+export async function getUserEnrollments(userId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get user enrollments: database not available");
+    return [];
+  }
+
+  try {
+    return await db.select().from(courseEnrollments).where(eq(courseEnrollments.userId, userId));
+  } catch (error) {
+    console.error("[Database] Failed to get user enrollments:", error);
+    return [];
+  }
+}
+
+export async function getUserEnrollment(userId: number, courseId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get user enrollment: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.select().from(courseEnrollments).where(
+      and(
+        eq(courseEnrollments.userId, userId),
+        eq(courseEnrollments.courseId, courseId)
+      )
+    ).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get user enrollment:", error);
+    return undefined;
+  }
+}
+
+export async function updateLessonProgress(progress: InsertLessonProgress) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot update lesson progress: database not available");
+    return undefined;
+  }
+
+  try {
+    // Check if progress exists
+    const existing = await db.select().from(lessonProgress).where(
+      and(
+        eq(lessonProgress.userId, progress.userId),
+        eq(lessonProgress.lessonId, progress.lessonId)
+      )
+    ).limit(1);
+
+    if (existing.length > 0) {
+      // Update existing
+      await db.update(lessonProgress)
+        .set({
+          isCompleted: progress.isCompleted,
+          watchedSeconds: progress.watchedSeconds,
+          completedAt: progress.isCompleted ? new Date() : null,
+        })
+        .where(eq(lessonProgress.id, existing[0].id));
+      return existing[0];
+    } else {
+      // Create new
+      const result = await db.insert(lessonProgress).values(progress);
+      return result;
+    }
+  } catch (error) {
+    console.error("[Database] Failed to update lesson progress:", error);
+    throw error;
+  }
+}
+
+export async function getUserLessonProgress(userId: number, courseId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get lesson progress: database not available");
+    return [];
+  }
+
+  try {
+    return await db.select().from(lessonProgress).where(
+      and(
+        eq(lessonProgress.userId, userId),
+        eq(lessonProgress.courseId, courseId)
+      )
+    );
+  } catch (error) {
+    console.error("[Database] Failed to get lesson progress:", error);
+    return [];
+  }
+}

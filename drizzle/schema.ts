@@ -345,3 +345,168 @@ export const taromanteServicesRelations = relations(taromanteServices, ({ one })
     references: [taromantes.id],
   }),
 }));
+
+
+/**
+ * Courses table - educational courses
+ */
+export const courses = mysqlTable("courses", {
+  id: int("id").autoincrement().primaryKey(),
+  slug: varchar("slug", { length: 128 }).notNull().unique(),
+  title: varchar("title", { length: 256 }).notNull(),
+  description: text("description"),
+  shortDescription: varchar("shortDescription", { length: 512 }),
+  category: mysqlEnum("category", ["tarot", "numerologia", "astrologia", "runas", "espiritualidade", "autoconhecimento"]).notNull(),
+  level: mysqlEnum("level", ["iniciante", "intermediario", "avancado"]).default("iniciante"),
+  imageUrl: text("imageUrl"),
+  instructorId: int("instructorId"), // Link to taromante if applicable
+  instructorName: varchar("instructorName", { length: 256 }),
+  price: decimal("price", { precision: 10, scale: 2 }).default("0"), // 0 = free
+  isFree: boolean("isFree").default(true),
+  isActive: boolean("isActive").default(true),
+  isFeatured: boolean("isFeatured").default(false),
+  totalModules: int("totalModules").default(0),
+  totalLessons: int("totalLessons").default(0),
+  totalDuration: int("totalDuration").default(0), // Total duration in minutes
+  enrollmentCount: int("enrollmentCount").default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Course = typeof courses.$inferSelect;
+export type InsertCourse = typeof courses.$inferInsert;
+
+/**
+ * Course modules - sections within a course
+ */
+export const courseModules = mysqlTable("course_modules", {
+  id: int("id").autoincrement().primaryKey(),
+  courseId: int("courseId").notNull(),
+  title: varchar("title", { length: 256 }).notNull(),
+  description: text("description"),
+  orderIndex: int("orderIndex").default(0),
+  isActive: boolean("isActive").default(true),
+});
+
+export type CourseModule = typeof courseModules.$inferSelect;
+export type InsertCourseModule = typeof courseModules.$inferInsert;
+
+/**
+ * Course lessons - individual lessons within modules
+ */
+export const courseLessons = mysqlTable("course_lessons", {
+  id: int("id").autoincrement().primaryKey(),
+  moduleId: int("moduleId").notNull(),
+  courseId: int("courseId").notNull(),
+  title: varchar("title", { length: 256 }).notNull(),
+  description: text("description"),
+  contentType: mysqlEnum("contentType", ["video", "text", "quiz", "exercise"]).default("video"),
+  videoUrl: text("videoUrl"),
+  textContent: text("textContent"),
+  duration: int("duration").default(0), // Duration in minutes
+  orderIndex: int("orderIndex").default(0),
+  isFree: boolean("isFree").default(false), // Free preview lesson
+  isActive: boolean("isActive").default(true),
+});
+
+export type CourseLesson = typeof courseLessons.$inferSelect;
+export type InsertCourseLesson = typeof courseLessons.$inferInsert;
+
+/**
+ * Course enrollments - user enrollments in courses
+ */
+export const courseEnrollments = mysqlTable("course_enrollments", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  courseId: int("courseId").notNull(),
+  status: mysqlEnum("status", ["active", "completed", "cancelled"]).default("active"),
+  progress: int("progress").default(0), // Percentage 0-100
+  completedLessons: int("completedLessons").default(0),
+  orderId: int("orderId"), // Link to order if paid course
+  stripeSessionId: varchar("stripeSessionId", { length: 256 }),
+  enrolledAt: timestamp("enrolledAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+});
+
+export type CourseEnrollment = typeof courseEnrollments.$inferSelect;
+export type InsertCourseEnrollment = typeof courseEnrollments.$inferInsert;
+
+/**
+ * Lesson progress - tracks user progress on individual lessons
+ */
+export const lessonProgress = mysqlTable("lesson_progress", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  lessonId: int("lessonId").notNull(),
+  courseId: int("courseId").notNull(),
+  isCompleted: boolean("isCompleted").default(false),
+  watchedSeconds: int("watchedSeconds").default(0),
+  completedAt: timestamp("completedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type LessonProgress = typeof lessonProgress.$inferSelect;
+export type InsertLessonProgress = typeof lessonProgress.$inferInsert;
+
+/**
+ * Relations for courses
+ */
+export const coursesRelations = relations(courses, ({ one, many }) => ({
+  instructor: one(taromantes, {
+    fields: [courses.instructorId],
+    references: [taromantes.id],
+  }),
+  modules: many(courseModules),
+  lessons: many(courseLessons),
+  enrollments: many(courseEnrollments),
+}));
+
+export const courseModulesRelations = relations(courseModules, ({ one, many }) => ({
+  course: one(courses, {
+    fields: [courseModules.courseId],
+    references: [courses.id],
+  }),
+  lessons: many(courseLessons),
+}));
+
+export const courseLessonsRelations = relations(courseLessons, ({ one }) => ({
+  module: one(courseModules, {
+    fields: [courseLessons.moduleId],
+    references: [courseModules.id],
+  }),
+  course: one(courses, {
+    fields: [courseLessons.courseId],
+    references: [courses.id],
+  }),
+}));
+
+export const courseEnrollmentsRelations = relations(courseEnrollments, ({ one }) => ({
+  user: one(users, {
+    fields: [courseEnrollments.userId],
+    references: [users.id],
+  }),
+  course: one(courses, {
+    fields: [courseEnrollments.courseId],
+    references: [courses.id],
+  }),
+  order: one(orders, {
+    fields: [courseEnrollments.orderId],
+    references: [orders.id],
+  }),
+}));
+
+export const lessonProgressRelations = relations(lessonProgress, ({ one }) => ({
+  user: one(users, {
+    fields: [lessonProgress.userId],
+    references: [users.id],
+  }),
+  lesson: one(courseLessons, {
+    fields: [lessonProgress.lessonId],
+    references: [courseLessons.id],
+  }),
+  course: one(courses, {
+    fields: [lessonProgress.courseId],
+    references: [courses.id],
+  }),
+}));

@@ -29,7 +29,21 @@ import {
   getTaromanteBookedSlots,
   getConsultationById,
   updateConsultationStatus,
-  createConsultationReview
+  createConsultationReview,
+  getTaromanteByUserId,
+  getAllCourses,
+  getFeaturedCourses,
+  getCourseBySlug,
+  getCourseById,
+  getCourseModules,
+  getModuleLessons,
+  getCourseLessons,
+  getLessonById,
+  enrollUserInCourse,
+  getUserEnrollments,
+  getUserEnrollment,
+  updateLessonProgress,
+  getUserLessonProgress
 } from "./db";
 import { createCheckoutSession, createConsultationCheckoutSession } from "./stripe/stripe";
 
@@ -270,6 +284,22 @@ export const appRouter = router({
           duration: s.duration,
         }));
       }),
+
+    getByUserId: protectedProcedure
+      .query(async ({ ctx }) => {
+        if (!ctx.user?.id) {
+          throw new Error("User not authenticated");
+        }
+        return await getTaromanteByUserId(ctx.user.id);
+      }),
+
+    getConsultations: protectedProcedure
+      .input(z.object({
+        taromanteId: z.number(),
+      }))
+      .query(async ({ input }) => {
+        return await getTaromanteConsultations(input.taromanteId);
+      }),
   }),
 
   // ==================== CONSULTATIONS ====================
@@ -434,6 +464,149 @@ export const appRouter = router({
           throw new Error("User not authenticated");
         }
         return await updateConsultationStatus(input.consultationId, input.status);
+      }),
+  }),
+
+  // ==================== COURSES ====================
+
+  courses: router({
+    list: publicProcedure
+      .input(z.object({
+        featuredOnly: z.boolean().optional().default(false),
+        category: z.string().optional(),
+      }))
+      .query(async ({ input }) => {
+        if (input.featuredOnly) {
+          return await getFeaturedCourses();
+        }
+        const allCourses = await getAllCourses();
+        if (input.category) {
+          return allCourses.filter(c => c.category === input.category);
+        }
+        return allCourses;
+      }),
+
+    getBySlug: publicProcedure
+      .input(z.object({
+        slug: z.string(),
+      }))
+      .query(async ({ input }) => {
+        return await getCourseBySlug(input.slug);
+      }),
+
+    getById: publicProcedure
+      .input(z.object({
+        id: z.number(),
+      }))
+      .query(async ({ input }) => {
+        return await getCourseById(input.id);
+      }),
+
+    getModules: publicProcedure
+      .input(z.object({
+        courseId: z.number(),
+      }))
+      .query(async ({ input }) => {
+        return await getCourseModules(input.courseId);
+      }),
+
+    getLessons: publicProcedure
+      .input(z.object({
+        moduleId: z.number(),
+      }))
+      .query(async ({ input }) => {
+        return await getModuleLessons(input.moduleId);
+      }),
+
+    getLesson: protectedProcedure
+      .input(z.object({
+        lessonId: z.number(),
+      }))
+      .query(async ({ ctx, input }) => {
+        if (!ctx.user?.id) {
+          throw new Error("User not authenticated");
+        }
+        const lesson = await getLessonById(input.lessonId);
+        if (!lesson) return null;
+        
+        // Check if user has access (enrolled or free lesson)
+        if (!lesson.isFree) {
+          const enrollment = await getUserEnrollment(ctx.user.id, lesson.courseId);
+          if (!enrollment) {
+            return { ...lesson, textContent: null, videoUrl: null, locked: true };
+          }
+        }
+        return { ...lesson, locked: false };
+      }),
+
+    enroll: protectedProcedure
+      .input(z.object({
+        courseId: z.number(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (!ctx.user?.id) {
+          throw new Error("User not authenticated");
+        }
+        
+        // Check if already enrolled
+        const existing = await getUserEnrollment(ctx.user.id, input.courseId);
+        if (existing) {
+          return existing;
+        }
+
+        // Check if course is free
+        const course = await getCourseById(input.courseId);
+        if (!course) {
+          throw new Error("Course not found");
+        }
+        if (!course.isFree) {
+          throw new Error("This course requires payment");
+        }
+
+        return await enrollUserInCourse({
+          userId: ctx.user.id,
+          courseId: input.courseId,
+          status: "active",
+        });
+      }),
+
+    getMyEnrollments: protectedProcedure
+      .query(async ({ ctx }) => {
+        if (!ctx.user?.id) {
+          throw new Error("User not authenticated");
+        }
+        return await getUserEnrollments(ctx.user.id);
+      }),
+
+    getProgress: protectedProcedure
+      .input(z.object({
+        courseId: z.number(),
+      }))
+      .query(async ({ ctx, input }) => {
+        if (!ctx.user?.id) {
+          throw new Error("User not authenticated");
+        }
+        return await getUserLessonProgress(ctx.user.id, input.courseId);
+      }),
+
+    updateProgress: protectedProcedure
+      .input(z.object({
+        lessonId: z.number(),
+        courseId: z.number(),
+        isCompleted: z.boolean().default(false),
+        watchedSeconds: z.number().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (!ctx.user?.id) {
+          throw new Error("User not authenticated");
+        }
+        return await updateLessonProgress({
+          userId: ctx.user.id,
+          lessonId: input.lessonId,
+          courseId: input.courseId,
+          isCompleted: input.isCompleted,
+          watchedSeconds: input.watchedSeconds,
+        });
       }),
   }),
 });

@@ -18,6 +18,11 @@ import CheckoutSuccess from "./pages/CheckoutSuccess";
 import MyProducts from "./pages/MyProducts";
 import Consultations from "./pages/Consultations";
 import TaromanteProfile from "./pages/TaromanteProfile";
+import TaromantePanel from "./pages/TaromantePanel";
+import Courses from "./pages/Courses";
+import CourseDetail from "./pages/CourseDetail";
+import CourseLesson from "./pages/CourseLesson";
+import AdminPanel from "./pages/AdminPanel";
 
 function Router() {
   return (
@@ -33,6 +38,7 @@ function Router() {
       {/* Consultas */}
       <Route path="/consultas" component={Consultations} />
       <Route path="/taromante/:slug" component={TaromanteProfile} />
+      <Route path="/painel-taromante" component={TaromantePanel} />
       <Route path="/consulta/sucesso">
         {() => (
           <div className="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950/20 to-gray-950 flex items-center justify-center">
@@ -53,6 +59,10 @@ function Router() {
           </div>
         )}
       </Route>
+      {/* Cursos */}
+      <Route path="/cursos" component={Courses} />
+      <Route path="/curso/:slug" component={CourseDetail} />
+      <Route path="/curso/:slug/aula/:lessonId" component={CourseLesson} />
       {/* Tarot */}
       <Route path="/tarot/dia">
         {() => <TarotGame gameType="dia" />}
@@ -63,6 +73,8 @@ function Router() {
       <Route path="/tarot/completo">
         {() => <TarotGame gameType="completo" />}
       </Route>
+      {/* Admin */}
+      <Route path="/admin" component={AdminPanel} />
       {/* Outros */}
       <Route path="/numerologia" component={Numerology} />
       <Route path="/horoscopo" component={Horoscope} />
