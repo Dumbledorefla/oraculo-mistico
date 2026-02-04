@@ -1,5 +1,5 @@
 /**
- * Jogo de Tarot Interativo
+ * Jogo de Tarot Interativo - Versão Expandida
  * Design: Neo-Mysticism - Fundo escuro com acentos dourados
  */
 
@@ -12,18 +12,21 @@ import {
   RotateCcw, 
   Lock,
   ChevronRight,
-  Star
+  Star,
+  History
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { tarotCards, CARD_BACK_IMAGE, TarotCard } from "@/data/tarotCards";
+import { majorArcana, TarotCard, getRandomCards } from "@/data/tarotCardsExpanded";
+import { tarotSpreads, getSpreadById } from "@/data/tarotSpreads";
+import { useReadingHistory } from "@/hooks/useReadingHistory";
 import { toast } from "sonner";
 
-type GamePhase = "intro" | "mentalize" | "shuffle" | "select" | "result";
+type GamePhase = "intro" | "spread-select" | "mentalize" | "shuffle" | "select" | "result" | "history";
 
 interface TarotGameProps {
-  gameType?: "dia" | "amor" | "completo";
+  gameType?: "dia" | "amor" | "completo" | "celtic" | "life-path";
 }
 
 export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
@@ -32,14 +35,19 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
   const [shuffledCards, setShuffledCards] = useState<TarotCard[]>([]);
   const [selectedCards, setSelectedCards] = useState<TarotCard[]>([]);
   const [isShuffling, setIsShuffling] = useState(false);
-  const [revealedCard, setRevealedCard] = useState<TarotCard | null>(null);
+  const [revealedCards, setRevealedCards] = useState<TarotCard[]>([]);
+  const [question, setQuestion] = useState("");
+  const { addReading, history, deleteReading } = useReadingHistory();
 
-  const cardsToSelect = gameType === "dia" ? 1 : gameType === "amor" ? 3 : 6;
-  const gameTitle = gameType === "dia" ? "Tarot do Dia" : gameType === "amor" ? "Tarot e o Amor" : "Tarot Completo";
+  const spreadId = gameType === "dia" ? "daily" : gameType === "amor" ? "love" : gameType === "completo" ? "complete" : gameType === "celtic" ? "celtic-cross" : "life-path";
+  const spread = getSpreadById(spreadId);
+  const cardsToSelect = spread?.cardCount || 1;
+  const gameTitle = spread?.name || "Tarot";
+  const isPremium = spread?.isPremium || false;
 
   // Shuffle cards on mount
   useEffect(() => {
-    const shuffled = [...tarotCards].sort(() => Math.random() - 0.5);
+    const shuffled = [...majorArcana].sort(() => Math.random() - 0.5);
     setShuffledCards(shuffled);
   }, []);
 
@@ -53,391 +61,390 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
 
   const handleMentalize = () => {
     setPhase("shuffle");
+  };
+
+  const handleShuffle = () => {
     setIsShuffling(true);
-    
-    // Simulate shuffling animation
     setTimeout(() => {
+      const shuffled = [...majorArcana].sort(() => Math.random() - 0.5);
+      setShuffledCards(shuffled);
       setIsShuffling(false);
       setPhase("select");
-    }, 3000);
+    }, 2000);
   };
 
   const handleSelectCard = (card: TarotCard) => {
-    if (selectedCards.find(c => c.id === card.id)) return;
-    if (selectedCards.length >= cardsToSelect) return;
-
-    const newSelected = [...selectedCards, card];
-    setSelectedCards(newSelected);
-
-    if (newSelected.length === cardsToSelect) {
-      setTimeout(() => {
-        setRevealedCard(newSelected[0]);
-        setPhase("result");
-      }, 500);
+    if (selectedCards.length < cardsToSelect) {
+      setSelectedCards([...selectedCards, card]);
+      
+      if (selectedCards.length + 1 === cardsToSelect) {
+        setTimeout(() => {
+          setRevealedCards([...selectedCards, card]);
+          setPhase("result");
+          
+          // Salvar no histórico
+          addReading({
+            spreadType: spreadId,
+            spreadName: gameTitle,
+            cards: [...selectedCards, card].map(c => c.id),
+            cardNames: [...selectedCards, card].map(c => c.name),
+            question: question || undefined
+          });
+        }, 500);
+      }
     }
   };
 
-  const handleRestart = () => {
+  const handleReset = () => {
     setPhase("intro");
+    setUserName("");
     setSelectedCards([]);
-    setRevealedCard(null);
-    const shuffled = [...tarotCards].sort(() => Math.random() - 0.5);
+    setRevealedCards([]);
+    setQuestion("");
+    const shuffled = [...majorArcana].sort(() => Math.random() - 0.5);
     setShuffledCards(shuffled);
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-primary/10">
-        <div className="container flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-            <span>Voltar</span>
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-black relative overflow-hidden">
+      {/* Background stars */}
+      <div className="absolute inset-0 overflow-hidden">
+        {[...Array(50)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-yellow-300 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{ opacity: [0.3, 1, 0.3] }}
+            transition={{ duration: Math.random() * 3 + 2, repeat: Infinity }}
+          />
+        ))}
+      </div>
+
+      <div className="relative z-10">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b border-yellow-500/20">
+          <Link href="/">
+            <Button variant="ghost" size="sm" className="text-yellow-400 hover:text-yellow-300">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Voltar
+            </Button>
           </Link>
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-primary" />
-            <span className="font-serif text-lg gold-text">{gameTitle}</span>
-          </div>
-          <div className="w-20" />
+          <h1 className="text-2xl font-bold text-yellow-400">{gameTitle}</h1>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-yellow-400 hover:text-yellow-300"
+            onClick={() => setPhase(phase === "history" ? "intro" : "history")}
+          >
+            <History className="w-4 h-4 mr-2" />
+            Histórico
+          </Button>
         </div>
-      </header>
 
-      <main className="pt-24 pb-12 container">
-        <AnimatePresence mode="wait">
-          {/* INTRO PHASE */}
-          {phase === "intro" && (
-            <motion.div
-              key="intro"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="max-w-md mx-auto text-center"
-            >
-              <div className="w-24 h-24 mx-auto mb-8 rounded-full bg-primary/10 flex items-center justify-center">
-                <Sparkles className="w-12 h-12 text-primary" />
-              </div>
-              
-              <h1 className="text-3xl font-bold mb-4">{gameTitle}</h1>
-              <p className="text-muted-foreground mb-8">
-                {gameType === "dia" 
-                  ? "Descubra a mensagem que o universo tem para você hoje."
-                  : gameType === "amor"
-                  ? "Explore as energias que cercam sua vida amorosa."
-                  : "Uma leitura completa sobre sua jornada de vida."}
-              </p>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm text-muted-foreground mb-2 text-left">
-                    Seu nome
-                  </label>
-                  <Input
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
-                    placeholder="Digite seu nome..."
-                    className="bg-card border-primary/20 focus:border-primary"
-                  />
-                </div>
-
-                <Button 
-                  onClick={handleStartGame}
-                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
-                  size="lg"
-                >
-                  Iniciar Jogo
-                  <ChevronRight className="w-5 h-5 ml-2" />
-                </Button>
-              </div>
-            </motion.div>
-          )}
-
-          {/* MENTALIZE PHASE */}
-          {phase === "mentalize" && (
-            <motion.div
-              key="mentalize"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="max-w-lg mx-auto text-center"
-            >
+        <div className="container mx-auto px-4 py-12">
+          <AnimatePresence mode="wait">
+            {/* Intro Phase */}
+            {phase === "intro" && (
               <motion.div
-                animate={{ 
-                  boxShadow: [
-                    "0 0 20px rgba(212, 175, 55, 0.3)",
-                    "0 0 60px rgba(212, 175, 55, 0.5)",
-                    "0 0 20px rgba(212, 175, 55, 0.3)"
-                  ]
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="w-40 h-40 mx-auto mb-8 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center"
+                key="intro"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="max-w-md mx-auto"
               >
-                <Star className="w-20 h-20 text-primary" />
-              </motion.div>
-
-              <h2 className="text-2xl font-bold mb-4">Momento de Mentalização</h2>
-              <p className="text-muted-foreground mb-8">
-                {userName}, feche os olhos por um momento. Respire fundo e concentre-se 
-                na pergunta ou situação que deseja iluminar. Quando estiver pronto, 
-                clique para embaralhar as cartas.
-              </p>
-
-              <Button 
-                onClick={handleMentalize}
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
-                size="lg"
-              >
-                Embaralhar as Cartas
-                <RotateCcw className="w-5 h-5 ml-2" />
-              </Button>
-            </motion.div>
-          )}
-
-          {/* SHUFFLE PHASE */}
-          {phase === "shuffle" && (
-            <motion.div
-              key="shuffle"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="max-w-lg mx-auto text-center"
-            >
-              <h2 className="text-2xl font-bold mb-8">Embaralhando...</h2>
-              
-              <div className="relative h-64 flex items-center justify-center">
-                {[0, 1, 2, 3, 4].map((i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute w-24 h-36 rounded-lg overflow-hidden shadow-xl"
-                    initial={{ x: 0, y: 0, rotate: 0 }}
-                    animate={{
-                      x: [0, (i - 2) * 30, 0, (i - 2) * -30, 0],
-                      y: [0, -20, 0, -20, 0],
-                      rotate: [0, (i - 2) * 15, 0, (i - 2) * -15, 0],
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      delay: i * 0.1,
-                    }}
-                    style={{ zIndex: 5 - i }}
-                  >
-                    <img 
-                      src={CARD_BACK_IMAGE} 
-                      alt="Carta" 
-                      className="w-full h-full object-cover"
-                    />
-                  </motion.div>
-                ))}
-              </div>
-
-              <p className="text-muted-foreground mt-8">
-                As cartas estão sendo preparadas para você...
-              </p>
-            </motion.div>
-          )}
-
-          {/* SELECT PHASE */}
-          {phase === "select" && (
-            <motion.div
-              key="select"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-center"
-            >
-              <h2 className="text-2xl font-bold mb-2">Escolha {cardsToSelect === 1 ? "sua carta" : `${cardsToSelect} cartas`}</h2>
-              <p className="text-muted-foreground mb-8">
-                {selectedCards.length} de {cardsToSelect} selecionada{cardsToSelect > 1 ? "s" : ""}
-              </p>
-
-              <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
-                {shuffledCards.slice(0, 12).map((card, index) => {
-                  const isSelected = selectedCards.find(c => c.id === card.id);
-                  const canSelect = selectedCards.length < cardsToSelect && !isSelected;
-                  
-                  return (
-                    <motion.button
-                      key={card.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                      onClick={() => canSelect && handleSelectCard(card)}
-                      disabled={!canSelect && !isSelected}
-                      className={`relative w-20 h-28 md:w-24 md:h-36 rounded-lg overflow-hidden transition-all duration-300 ${
-                        isSelected 
-                          ? "ring-2 ring-primary scale-95 opacity-50" 
-                          : canSelect 
-                          ? "hover:scale-105 hover:shadow-lg hover:shadow-primary/20 cursor-pointer" 
-                          : "opacity-30 cursor-not-allowed"
-                      }`}
-                    >
-                      <img 
-                        src={CARD_BACK_IMAGE} 
-                        alt="Carta" 
-                        className="w-full h-full object-cover"
-                      />
-                      {isSelected && (
-                        <div className="absolute inset-0 bg-primary/30 flex items-center justify-center">
-                          <Star className="w-8 h-8 text-primary" />
+                <Card className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 border-yellow-500/30">
+                  <CardContent className="p-8 space-y-6">
+                    <div className="text-center">
+                      <Sparkles className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
+                      <h2 className="text-2xl font-bold text-white mb-2">{gameTitle}</h2>
+                      <p className="text-gray-300">{spread?.description}</p>
+                      {isPremium && (
+                        <div className="mt-3 inline-block px-3 py-1 bg-yellow-500/20 border border-yellow-500/50 rounded-full">
+                          <span className="text-yellow-400 text-sm font-semibold">✨ Premium</span>
                         </div>
                       )}
-                    </motion.button>
-                  );
-                })}
-              </div>
-            </motion.div>
-          )}
-
-          {/* RESULT PHASE */}
-          {phase === "result" && revealedCard && (
-            <motion.div
-              key="result"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="max-w-4xl mx-auto"
-            >
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold mb-2">Sua Leitura, {userName}</h2>
-                <p className="text-muted-foreground">
-                  {gameType === "dia" ? "A carta do dia" : `${selectedCards.length} carta${selectedCards.length > 1 ? "s" : ""} selecionada${selectedCards.length > 1 ? "s" : ""}`}
-                </p>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-8 items-start">
-                {/* Card Display */}
-                <motion.div
-                  initial={{ rotateY: 180 }}
-                  animate={{ rotateY: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="flex justify-center"
-                >
-                  <div className="relative">
-                    <img 
-                      src={revealedCard.image} 
-                      alt={revealedCard.name}
-                      className="w-64 h-auto rounded-xl shadow-2xl"
-                    />
-                    <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-card rounded-full border border-primary/30">
-                      <span className="font-serif text-lg gold-text">{revealedCard.name}</span>
                     </div>
+
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-gray-300 text-sm font-medium mb-2 block">
+                          Seu Nome
+                        </label>
+                        <Input
+                          value={userName}
+                          onChange={(e) => setUserName(e.target.value)}
+                          placeholder="Digite seu nome..."
+                          className="bg-purple-900/50 border-yellow-500/30 text-white placeholder:text-gray-500"
+                          onKeyPress={(e) => e.key === "Enter" && handleStartGame()}
+                        />
+                      </div>
+
+                      {(gameType === "amor" || gameType === "completo" || gameType === "celtic" || gameType === "life-path") && (
+                        <div>
+                          <label className="text-gray-300 text-sm font-medium mb-2 block">
+                            Sua Pergunta (Opcional)
+                          </label>
+                          <Input
+                            value={question}
+                            onChange={(e) => setQuestion(e.target.value)}
+                            placeholder="O que você gostaria de saber?"
+                            className="bg-purple-900/50 border-yellow-500/30 text-white placeholder:text-gray-500"
+                          />
+                        </div>
+                      )}
+
+                      <Button
+                        onClick={handleStartGame}
+                        className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2"
+                      >
+                        Começar <ChevronRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+
+            {/* Mentalize Phase */}
+            {phase === "mentalize" && (
+              <motion.div
+                key="mentalize"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="max-w-2xl mx-auto text-center"
+              >
+                <motion.div
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="mb-8"
+                >
+                  <Star className="w-16 h-16 text-yellow-400 mx-auto" />
+                </motion.div>
+                <h2 className="text-3xl font-bold text-white mb-4">Concentre-se</h2>
+                <p className="text-gray-300 mb-8">
+                  Feche os olhos, respire profundamente e concentre-se em sua pergunta ou intenção.
+                </p>
+                <Button
+                  onClick={handleMentalize}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-8 py-3"
+                >
+                  Continuar <ChevronRight className="w-4 h-4 ml-2" />
+                </Button>
+              </motion.div>
+            )}
+
+            {/* Shuffle Phase */}
+            {phase === "shuffle" && (
+              <motion.div
+                key="shuffle"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="max-w-2xl mx-auto text-center"
+              >
+                <motion.div
+                  animate={{ rotate: isShuffling ? 360 : 0 }}
+                  transition={{ duration: 2, repeat: isShuffling ? Infinity : 0 }}
+                  className="mb-8"
+                >
+                  <div className="w-24 h-32 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg mx-auto flex items-center justify-center shadow-lg shadow-yellow-500/50">
+                    <Sparkles className="w-12 h-12 text-white" />
                   </div>
                 </motion.div>
+                <h2 className="text-3xl font-bold text-white mb-4">Embaralhando as cartas...</h2>
+                <p className="text-gray-300 mb-8">
+                  As energias do universo estão se alinhando para você.
+                </p>
+                <Button
+                  onClick={handleShuffle}
+                  disabled={isShuffling}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-8 py-3 disabled:opacity-50"
+                >
+                  {isShuffling ? "Embaralhando..." : "Embaralhar"} <RotateCcw className="w-4 h-4 ml-2" />
+                </Button>
+              </motion.div>
+            )}
 
-                {/* Interpretation */}
-                <div className="space-y-6">
-                  {/* Keywords */}
-                  <div className="flex flex-wrap gap-2">
-                    {revealedCard.keywords.map((keyword, i) => (
-                      <span 
-                        key={i}
-                        className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
-                      >
-                        {keyword}
-                      </span>
-                    ))}
-                  </div>
+            {/* Select Phase */}
+            {phase === "select" && (
+              <motion.div
+                key="select"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl font-bold text-white mb-2">
+                    Selecione {cardsToSelect} carta{cardsToSelect > 1 ? "s" : ""}
+                  </h2>
+                  <p className="text-gray-300">
+                    Você selecionou {selectedCards.length} de {cardsToSelect}
+                  </p>
+                </div>
 
-                  {/* General Meaning - Free */}
-                  <Card className="bg-card/50 border-primary/20">
-                    <CardContent className="p-6">
-                      <h3 className="font-serif text-xl font-semibold mb-3 gold-text">
-                        Significado Geral
-                      </h3>
-                      <p className="text-muted-foreground leading-relaxed">
-                        {revealedCard.meaning.general}
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  {/* Advice - Free */}
-                  <Card className="bg-card/50 border-primary/20">
-                    <CardContent className="p-6">
-                      <h3 className="font-serif text-xl font-semibold mb-3 gold-text">
-                        Conselho
-                      </h3>
-                      <p className="text-muted-foreground leading-relaxed">
-                        {revealedCard.meaning.advice}
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  {/* Premium Content - Locked */}
-                  <Card className="bg-card/30 border-primary/10 relative overflow-hidden">
-                    <div className="absolute inset-0 backdrop-blur-sm bg-background/50 z-10 flex flex-col items-center justify-center">
-                      <Lock className="w-8 h-8 text-primary mb-3" />
-                      <p className="text-sm text-muted-foreground mb-3">Conteúdo Premium</p>
-                      <Button 
-                        size="sm" 
-                        className="bg-primary text-primary-foreground"
-                        onClick={() => toast.info("Funcionalidade de assinatura em desenvolvimento!")}
-                      >
-                        Desbloquear Leitura Completa
-                      </Button>
-                    </div>
-                    <CardContent className="p-6">
-                      <h3 className="font-serif text-xl font-semibold mb-3">No Amor</h3>
-                      <p className="text-muted-foreground">
-                        {revealedCard.meaning.love.substring(0, 50)}...
-                      </p>
-                      <h3 className="font-serif text-xl font-semibold mb-3 mt-4">No Trabalho</h3>
-                      <p className="text-muted-foreground">
-                        {revealedCard.meaning.work.substring(0, 50)}...
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  {/* Actions */}
-                  <div className="flex gap-4">
-                    <Button 
-                      variant="outline" 
-                      onClick={handleRestart}
-                      className="flex-1"
+                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-8">
+                  {shuffledCards.map((card, index) => (
+                    <motion.button
+                      key={index}
+                      onClick={() => handleSelectCard(card)}
+                      disabled={selectedCards.length >= cardsToSelect}
+                      className="relative group"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     >
-                      <RotateCcw className="w-4 h-4 mr-2" />
-                      Jogar Novamente
-                    </Button>
-                    <Link href="/" className="flex-1">
-                      <Button variant="outline" className="w-full">
-                        Voltar ao Início
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-
-              {/* Multiple Cards Display */}
-              {selectedCards.length > 1 && (
-                <div className="mt-12">
-                  <h3 className="text-xl font-bold mb-6 text-center">Todas as Cartas Selecionadas</h3>
-                  <div className="flex justify-center gap-4 flex-wrap">
-                    {selectedCards.map((card, index) => (
-                      <motion.button
-                        key={card.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        onClick={() => setRevealedCard(card)}
-                        className={`relative w-20 h-28 rounded-lg overflow-hidden transition-all ${
-                          revealedCard?.id === card.id 
-                            ? "ring-2 ring-primary" 
-                            : "opacity-70 hover:opacity-100"
-                        }`}
-                      >
-                        <img 
-                          src={card.image} 
-                          alt={card.name}
-                          className="w-full h-full object-cover"
+                      <div className="w-full aspect-[3/4] bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center shadow-lg shadow-yellow-500/50 group-hover:shadow-yellow-500/80 transition-all cursor-pointer">
+                        <Sparkles className="w-8 h-8 text-white" />
+                      </div>
+                      {selectedCards.includes(card) && (
+                        <motion.div
+                          layoutId={`selected-${index}`}
+                          className="absolute inset-0 bg-green-500/30 rounded-lg border-2 border-green-400"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
                         />
-                      </motion.button>
+                      )}
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
+            {/* Result Phase */}
+            {phase === "result" && (
+              <motion.div
+                key="result"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <div className="text-center mb-8">
+                  <h2 className="text-3xl font-bold text-yellow-400 mb-2">Seu Resultado</h2>
+                  <p className="text-gray-300">Bem-vindo, {userName}! Aqui está sua mensagem do universo.</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                  {revealedCards.map((card, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, rotateY: 180 }}
+                      animate={{ opacity: 1, rotateY: 0 }}
+                      transition={{ delay: index * 0.3 }}
+                    >
+                      <Card className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 border-yellow-500/30 overflow-hidden">
+                        <CardContent className="p-6">
+                          <div className="text-center mb-4">
+                            <h3 className="text-xl font-bold text-yellow-400">{card.name}</h3>
+                            {spread?.positions[index] && (
+                              <p className="text-sm text-gray-400">{spread.positions[index].name}</p>
+                            )}
+                          </div>
+                          <div className="bg-purple-900/50 rounded-lg p-4 mb-4 h-32 flex items-center justify-center">
+                            <Sparkles className="w-12 h-12 text-yellow-400" />
+                          </div>
+                          <div className="space-y-3 text-sm">
+                            <div>
+                              <p className="text-gray-400 text-xs">Significado</p>
+                              <p className="text-white">{card.meaning}</p>
+                            </div>
+                            <div>
+                              <p className="text-gray-400 text-xs">Interpretação</p>
+                              <p className="text-white">{card.interpretation}</p>
+                            </div>
+                            <div>
+                              <p className="text-gray-400 text-xs">Conselho</p>
+                              <p className="text-yellow-300">{card.advice}</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <div className="flex gap-4 justify-center">
+                  <Button
+                    onClick={handleReset}
+                    className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-8 py-2"
+                  >
+                    <RotateCcw className="w-4 h-4 mr-2" />
+                    Nova Leitura
+                  </Button>
+                  <Link href="/">
+                    <Button variant="outline" className="border-yellow-500/30 text-yellow-400 hover:text-yellow-300">
+                      <ArrowLeft className="w-4 h-4 mr-2" />
+                      Voltar
+                    </Button>
+                  </Link>
+                </div>
+              </motion.div>
+            )}
+
+            {/* History Phase */}
+            {phase === "history" && (
+              <motion.div
+                key="history"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="max-w-4xl mx-auto"
+              >
+                <h2 className="text-2xl font-bold text-yellow-400 mb-6">Histórico de Leituras</h2>
+                {history.length === 0 ? (
+                  <Card className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 border-yellow-500/30">
+                    <CardContent className="p-8 text-center">
+                      <p className="text-gray-300">Você ainda não fez nenhuma leitura.</p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <div className="space-y-4">
+                    {history.map((reading) => (
+                      <Card key={reading.id} className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 border-yellow-500/30">
+                        <CardContent className="p-6">
+                          <div className="flex justify-between items-start mb-3">
+                            <div>
+                              <h3 className="text-lg font-bold text-yellow-400">{reading.spreadName}</h3>
+                              <p className="text-sm text-gray-400">{reading.date}</p>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => deleteReading(reading.id)}
+                              className="text-red-400 hover:text-red-300"
+                            >
+                              Deletar
+                            </Button>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-300">
+                              <span className="text-yellow-400 font-semibold">Cartas:</span> {reading.cardNames.join(", ")}
+                            </p>
+                            {reading.question && (
+                              <p className="text-sm text-gray-300 mt-2">
+                                <span className="text-yellow-400 font-semibold">Pergunta:</span> {reading.question}
+                              </p>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
                     ))}
                   </div>
-                </div>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </main>
+                )}
+                <Button
+                  onClick={() => setPhase("intro")}
+                  className="mt-6 bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-8 py-2"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Voltar
+                </Button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
     </div>
   );
 }
