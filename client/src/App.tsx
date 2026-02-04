@@ -16,6 +16,8 @@ import Sample from "./pages/Sample";
 import Cart from "./pages/Cart";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
 import MyProducts from "./pages/MyProducts";
+import Consultations from "./pages/Consultations";
+import TaromanteProfile from "./pages/TaromanteProfile";
 
 function Router() {
   return (
@@ -28,6 +30,29 @@ function Router() {
       <Route path="/carrinho" component={Cart} />
       <Route path="/checkout/sucesso" component={CheckoutSuccess} />
       <Route path="/meus-produtos" component={MyProducts} />
+      {/* Consultas */}
+      <Route path="/consultas" component={Consultations} />
+      <Route path="/taromante/:slug" component={TaromanteProfile} />
+      <Route path="/consulta/sucesso">
+        {() => (
+          <div className="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950/20 to-gray-950 flex items-center justify-center">
+            <div className="text-center max-w-md mx-auto p-8">
+              <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h1 className="text-3xl font-serif text-white mb-4">Consulta Agendada!</h1>
+              <p className="text-gray-400 mb-6">
+                Sua consulta foi agendada com sucesso. Você receberá um email com os detalhes e instruções para a sessão.
+              </p>
+              <a href="/perfil" className="inline-block bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-lg transition-colors">
+                Ver Minhas Consultas
+              </a>
+            </div>
+          </div>
+        )}
+      </Route>
       {/* Tarot */}
       <Route path="/tarot/dia">
         {() => <TarotGame gameType="dia" />}

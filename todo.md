@@ -45,3 +45,43 @@
 - [x] Horóscopo (12 signos)
 - [x] Histórico de leituras
 - [x] Página de perfil do usuário
+
+
+---
+
+## Fase 3 - Consultas com Taromantes
+
+### Banco de Dados
+- [x] Criar tabela de taromantes (perfil, especialidades, bio)
+- [x] Criar tabela de disponibilidade/agenda
+- [x] Criar tabela de consultas agendadas
+- [x] Criar tabela de avaliações/reviews
+- [x] Criar seed com 5 taromantes de exemplo
+
+### Página de Listagem
+- [x] Criar página /consultas com lista de taromantes
+- [x] Implementar cards com foto, nome, especialidades e avaliação
+- [x] Adicionar filtros por especialidade e disponibilidade
+- [x] Mostrar preço por consulta
+- [x] Adicionar busca por nome
+
+### Perfil do Taromante
+- [x] Criar página /taromante/:slug com perfil completo
+- [x] Exibir bio, especialidades e experiência
+- [x] Mostrar calendário de disponibilidade
+- [x] Exibir avaliações de clientes
+- [x] Mostrar serviços com preços diferentes
+
+### Sistema de Agendamento
+- [x] Implementar seleção de data e horário
+- [x] Criar formulário de agendamento
+- [x] Integrar com checkout Stripe
+- [x] Criar página de sucesso de consulta
+- [ ] Enviar confirmação por email/notificação
+
+### Painel do Taromante
+- [ ] Criar dashboard /painel-taromante
+- [ ] Implementar gestão de agenda
+- [ ] Criar gestão de serviços e preços
+- [ ] Mostrar histórico de consultas
+- [ ] Exibir relatório financeiro

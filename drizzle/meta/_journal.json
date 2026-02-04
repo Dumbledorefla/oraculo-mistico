@@ -22,6 +22,13 @@
       "when": 1770190241145,
       "tag": "0002_dashing_sebastian_shaw",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1770191504687,
+      "tag": "0003_famous_pepper_potts",
+      "breakpoints": true
     }
   ]
 }

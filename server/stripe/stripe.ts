@@ -247,3 +247,93 @@ export function registerStripeRoutes(app: Express) {
     }
   );
 }
+
+
+/**
+ * Create a Stripe Checkout Session for Consultations
+ */
+export interface CreateConsultationCheckoutParams {
+  taromanteId: number;
+  taromanteSlug: string;
+  taromanteName: string;
+  serviceName: string;
+  scheduledAt: string;
+  duration: number;
+  consultationType: "video" | "chat" | "phone";
+  topic?: string;
+  price: string;
+  userId: number;
+  userEmail: string;
+  userName: string;
+  origin: string;
+}
+
+export async function createConsultationCheckoutSession(params: CreateConsultationCheckoutParams): Promise<string> {
+  const {
+    taromanteId,
+    taromanteSlug,
+    taromanteName,
+    serviceName,
+    scheduledAt,
+    duration,
+    consultationType,
+    topic,
+    price,
+    userId,
+    userEmail,
+    userName,
+    origin,
+  } = params;
+
+  // Convert price to cents
+  const priceInCents = Math.round(parseFloat(price) * 100);
+
+  // Format date for display
+  const scheduledDate = new Date(scheduledAt);
+  const formattedDate = scheduledDate.toLocaleDateString("pt-BR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  // Create checkout session
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: [
+      {
+        price_data: {
+          currency: "brl",
+          product_data: {
+            name: `Consulta com ${taromanteName}`,
+            description: `${serviceName} (${duration} min) - ${formattedDate}`,
+          },
+          unit_amount: priceInCents,
+        },
+        quantity: 1,
+      },
+    ],
+    mode: "payment",
+    success_url: `${origin}/consulta/sucesso?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${origin}/taromante/${taromanteSlug}?cancelled=true`,
+    customer_email: userEmail,
+    client_reference_id: userId.toString(),
+    allow_promotion_codes: true,
+    metadata: {
+      type: "consultation",
+      user_id: userId.toString(),
+      customer_email: userEmail,
+      customer_name: userName,
+      taromante_id: taromanteId.toString(),
+      taromante_name: taromanteName,
+      scheduled_at: scheduledAt,
+      duration: duration.toString(),
+      consultation_type: consultationType,
+      topic: topic || "",
+      price: price,
+    },
+  });
+
+  return session.url || "";
+}

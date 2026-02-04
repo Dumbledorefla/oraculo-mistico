@@ -469,3 +469,302 @@ export async function userOwnsProduct(userId: number, productId: number) {
     return false;
   }
 }
+
+
+// ==================== TAROMANTE QUERIES ====================
+
+import { 
+  taromantes, InsertTaromante,
+  taromanteAvailability, InsertTaromanteAvailability,
+  taromanteServices, InsertTaromanteService,
+  consultations, InsertConsultation,
+  consultationReviews, InsertConsultationReview
+} from "../drizzle/schema";
+
+export async function getAllTaromantes(activeOnly: boolean = true) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get taromantes: database not available");
+    return [];
+  }
+
+  try {
+    if (activeOnly) {
+      return await db.select().from(taromantes).where(eq(taromantes.isActive, true));
+    }
+    return await db.select().from(taromantes);
+  } catch (error) {
+    console.error("[Database] Failed to get taromantes:", error);
+    return [];
+  }
+}
+
+export async function getFeaturedTaromantes() {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get featured taromantes: database not available");
+    return [];
+  }
+
+  try {
+    return await db.select().from(taromantes).where(
+      and(
+        eq(taromantes.isFeatured, true),
+        eq(taromantes.isActive, true)
+      )
+    );
+  } catch (error) {
+    console.error("[Database] Failed to get featured taromantes:", error);
+    return [];
+  }
+}
+
+export async function getTaromanteBySlug(slug: string) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get taromante: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.select().from(taromantes).where(eq(taromantes.slug, slug)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get taromante:", error);
+    return undefined;
+  }
+}
+
+export async function getTaromanteById(id: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get taromante: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.select().from(taromantes).where(eq(taromantes.id, id)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get taromante:", error);
+    return undefined;
+  }
+}
+
+export async function getTaromanteAvailability(taromanteId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get taromante availability: database not available");
+    return [];
+  }
+
+  try {
+    return await db.select().from(taromanteAvailability).where(
+      and(
+        eq(taromanteAvailability.taromanteId, taromanteId),
+        eq(taromanteAvailability.isActive, true)
+      )
+    );
+  } catch (error) {
+    console.error("[Database] Failed to get taromante availability:", error);
+    return [];
+  }
+}
+
+export async function getTaromanteServices(taromanteId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get taromante services: database not available");
+    return [];
+  }
+
+  try {
+    return await db.select().from(taromanteServices).where(
+      and(
+        eq(taromanteServices.taromanteId, taromanteId),
+        eq(taromanteServices.isActive, true)
+      )
+    );
+  } catch (error) {
+    console.error("[Database] Failed to get taromante services:", error);
+    return [];
+  }
+}
+
+export async function getTaromanteReviews(taromanteId: number, limit: number = 10) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get taromante reviews: database not available");
+    return [];
+  }
+
+  try {
+    return await db.select().from(consultationReviews).where(
+      and(
+        eq(consultationReviews.taromanteId, taromanteId),
+        eq(consultationReviews.isPublic, true)
+      )
+    ).orderBy(desc(consultationReviews.createdAt)).limit(limit);
+  } catch (error) {
+    console.error("[Database] Failed to get taromante reviews:", error);
+    return [];
+  }
+}
+
+// ==================== CONSULTATION QUERIES ====================
+
+export async function createConsultation(consultation: InsertConsultation) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot create consultation: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.insert(consultations).values(consultation);
+    return result;
+  } catch (error) {
+    console.error("[Database] Failed to create consultation:", error);
+    throw error;
+  }
+}
+
+export async function getConsultationById(id: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get consultation: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.select().from(consultations).where(eq(consultations.id, id)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get consultation:", error);
+    return undefined;
+  }
+}
+
+export async function getUserConsultations(userId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get user consultations: database not available");
+    return [];
+  }
+
+  try {
+    return await db.select().from(consultations).where(eq(consultations.userId, userId)).orderBy(desc(consultations.scheduledAt));
+  } catch (error) {
+    console.error("[Database] Failed to get user consultations:", error);
+    return [];
+  }
+}
+
+export async function getTaromanteConsultations(taromanteId: number, status?: string) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get taromante consultations: database not available");
+    return [];
+  }
+
+  try {
+    if (status) {
+      return await db.select().from(consultations).where(
+        and(
+          eq(consultations.taromanteId, taromanteId),
+          eq(consultations.status, status as any)
+        )
+      ).orderBy(desc(consultations.scheduledAt));
+    }
+    return await db.select().from(consultations).where(eq(consultations.taromanteId, taromanteId)).orderBy(desc(consultations.scheduledAt));
+  } catch (error) {
+    console.error("[Database] Failed to get taromante consultations:", error);
+    return [];
+  }
+}
+
+export async function updateConsultationStatus(consultationId: number, status: string, paidAt?: Date) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot update consultation: database not available");
+    return undefined;
+  }
+
+  try {
+    const updateData: any = { status };
+    if (paidAt) {
+      updateData.paidAt = paidAt;
+    }
+    return await db.update(consultations).set(updateData).where(eq(consultations.id, consultationId));
+  } catch (error) {
+    console.error("[Database] Failed to update consultation:", error);
+    throw error;
+  }
+}
+
+export async function getConsultationByStripeSessionId(sessionId: string) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get consultation: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.select().from(consultations).where(eq(consultations.stripeSessionId, sessionId)).limit(1);
+    return result.length > 0 ? result[0] : undefined;
+  } catch (error) {
+    console.error("[Database] Failed to get consultation by session:", error);
+    return undefined;
+  }
+}
+
+export async function getTaromanteBookedSlots(taromanteId: number, startDate: Date, endDate: Date) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get booked slots: database not available");
+    return [];
+  }
+
+  try {
+    return await db.select().from(consultations).where(
+      and(
+        eq(consultations.taromanteId, taromanteId),
+        sql`${consultations.scheduledAt} >= ${startDate}`,
+        sql`${consultations.scheduledAt} <= ${endDate}`,
+        sql`${consultations.status} NOT IN ('cancelled')`
+      )
+    );
+  } catch (error) {
+    console.error("[Database] Failed to get booked slots:", error);
+    return [];
+  }
+}
+
+// ==================== REVIEW QUERIES ====================
+
+export async function createConsultationReview(review: InsertConsultationReview) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot create review: database not available");
+    return undefined;
+  }
+
+  try {
+    const result = await db.insert(consultationReviews).values(review);
+    
+    // Update taromante rating
+    const reviews = await getTaromanteReviews(review.taromanteId, 1000);
+    if (reviews.length > 0) {
+      const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+      await db.update(taromantes).set({
+        rating: avgRating.toFixed(1),
+        totalReviews: reviews.length,
+      }).where(eq(taromantes.id, review.taromanteId));
+    }
+    
+    return result;
+  } catch (error) {
+    console.error("[Database] Failed to create review:", error);
+    throw error;
+  }
+}

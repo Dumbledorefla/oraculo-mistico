@@ -15,9 +15,23 @@ import {
   getUserProducts,
   userOwnsProduct,
   getUserOrders,
-  getOrderItems
+  getOrderItems,
+  getAllTaromantes,
+  getFeaturedTaromantes,
+  getTaromanteBySlug,
+  getTaromanteById,
+  getTaromanteAvailability,
+  getTaromanteServices,
+  getTaromanteReviews,
+  createConsultation,
+  getUserConsultations,
+  getTaromanteConsultations,
+  getTaromanteBookedSlots,
+  getConsultationById,
+  updateConsultationStatus,
+  createConsultationReview
 } from "./db";
-import { createCheckoutSession } from "./stripe/stripe";
+import { createCheckoutSession, createConsultationCheckoutSession } from "./stripe/stripe";
 
 export const appRouter = router({
   system: systemRouter,
@@ -180,6 +194,246 @@ export const appRouter = router({
         });
 
         return { url: checkoutUrl };
+      }),
+  }),
+
+  // ==================== TAROMANTES ====================
+  
+  taromantes: router({
+    list: publicProcedure
+      .input(z.object({
+        featuredOnly: z.boolean().optional().default(false),
+      }))
+      .query(async ({ input }) => {
+        if (input.featuredOnly) {
+          return await getFeaturedTaromantes();
+        }
+        return await getAllTaromantes();
+      }),
+
+    getBySlug: publicProcedure
+      .input(z.object({
+        slug: z.string(),
+      }))
+      .query(async ({ input }) => {
+        return await getTaromanteBySlug(input.slug);
+      }),
+
+    getById: publicProcedure
+      .input(z.object({
+        id: z.number(),
+      }))
+      .query(async ({ input }) => {
+        return await getTaromanteById(input.id);
+      }),
+
+    getAvailability: publicProcedure
+      .input(z.object({
+        taromanteId: z.number(),
+      }))
+      .query(async ({ input }) => {
+        return await getTaromanteAvailability(input.taromanteId);
+      }),
+
+    getServices: publicProcedure
+      .input(z.object({
+        taromanteId: z.number(),
+      }))
+      .query(async ({ input }) => {
+        return await getTaromanteServices(input.taromanteId);
+      }),
+
+    getReviews: publicProcedure
+      .input(z.object({
+        taromanteId: z.number(),
+        limit: z.number().optional().default(10),
+      }))
+      .query(async ({ input }) => {
+        return await getTaromanteReviews(input.taromanteId, input.limit);
+      }),
+
+    getBookedSlots: publicProcedure
+      .input(z.object({
+        taromanteId: z.number(),
+        startDate: z.string(),
+        endDate: z.string(),
+      }))
+      .query(async ({ input }) => {
+        const slots = await getTaromanteBookedSlots(
+          input.taromanteId,
+          new Date(input.startDate),
+          new Date(input.endDate)
+        );
+        // Return only the scheduled times, not full consultation details
+        return slots.map(s => ({
+          scheduledAt: s.scheduledAt,
+          duration: s.duration,
+        }));
+      }),
+  }),
+
+  // ==================== CONSULTATIONS ====================
+
+  consultations: router({
+    create: protectedProcedure
+      .input(z.object({
+        taromanteId: z.number(),
+        serviceId: z.number().optional(),
+        scheduledAt: z.string(),
+        duration: z.number().default(30),
+        consultationType: z.enum(["video", "chat", "phone"]).default("video"),
+        topic: z.string().optional(),
+        price: z.string(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (!ctx.user?.id) {
+          throw new Error("User not authenticated");
+        }
+
+        const result = await createConsultation({
+          userId: ctx.user.id,
+          taromanteId: input.taromanteId,
+          scheduledAt: new Date(input.scheduledAt),
+          duration: input.duration,
+          consultationType: input.consultationType,
+          topic: input.topic,
+          price: input.price,
+          status: "pending",
+        });
+
+        return result;
+      }),
+
+    createWithPayment: protectedProcedure
+      .input(z.object({
+        taromanteId: z.number(),
+        taromanteSlug: z.string(),
+        taromanteName: z.string(),
+        serviceName: z.string(),
+        scheduledAt: z.string(),
+        duration: z.number().default(30),
+        consultationType: z.enum(["video", "chat", "phone"]).default("video"),
+        topic: z.string().optional(),
+        price: z.string(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (!ctx.user?.id || !ctx.user?.email) {
+          throw new Error("User not authenticated");
+        }
+
+        const origin = ctx.req.headers.origin || "https://chavedooraculo.com";
+
+        const checkoutUrl = await createConsultationCheckoutSession({
+          taromanteId: input.taromanteId,
+          taromanteSlug: input.taromanteSlug,
+          taromanteName: input.taromanteName,
+          serviceName: input.serviceName,
+          scheduledAt: input.scheduledAt,
+          duration: input.duration,
+          consultationType: input.consultationType,
+          topic: input.topic,
+          price: input.price,
+          userId: ctx.user.id,
+          userEmail: ctx.user.email,
+          userName: ctx.user.name || "Cliente",
+          origin,
+        });
+
+        return { url: checkoutUrl };
+      }),
+
+    getMyConsultations: protectedProcedure
+      .query(async ({ ctx }) => {
+        if (!ctx.user?.id) {
+          throw new Error("User not authenticated");
+        }
+        return await getUserConsultations(ctx.user.id);
+      }),
+
+    getById: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+      }))
+      .query(async ({ ctx, input }) => {
+        if (!ctx.user?.id) {
+          throw new Error("User not authenticated");
+        }
+        const consultation = await getConsultationById(input.id);
+        // Only return if user is the client or the taromante
+        if (consultation && consultation.userId === ctx.user.id) {
+          return consultation;
+        }
+        return null;
+      }),
+
+    cancel: protectedProcedure
+      .input(z.object({
+        id: z.number(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (!ctx.user?.id) {
+          throw new Error("User not authenticated");
+        }
+        const consultation = await getConsultationById(input.id);
+        if (!consultation || consultation.userId !== ctx.user.id) {
+          throw new Error("Consultation not found");
+        }
+        return await updateConsultationStatus(input.id, "cancelled");
+      }),
+
+    addReview: protectedProcedure
+      .input(z.object({
+        consultationId: z.number(),
+        rating: z.number().min(1).max(5),
+        comment: z.string().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (!ctx.user?.id) {
+          throw new Error("User not authenticated");
+        }
+        const consultation = await getConsultationById(input.consultationId);
+        if (!consultation || consultation.userId !== ctx.user.id) {
+          throw new Error("Consultation not found");
+        }
+        if (consultation.status !== "completed") {
+          throw new Error("Can only review completed consultations");
+        }
+        return await createConsultationReview({
+          consultationId: input.consultationId,
+          userId: ctx.user.id,
+          taromanteId: consultation.taromanteId,
+          rating: input.rating,
+          comment: input.comment,
+        });
+      }),
+  }),
+
+  // ==================== TAROMANTE PANEL ====================
+
+  taromantePanel: router({
+    getMyConsultations: protectedProcedure
+      .input(z.object({
+        status: z.string().optional(),
+      }))
+      .query(async ({ ctx, input }) => {
+        if (!ctx.user?.id) {
+          throw new Error("User not authenticated");
+        }
+        // For now, we'll use a simple check - in production, you'd verify the user is a taromante
+        // This would require linking the taromante record to the user
+        return await getTaromanteConsultations(ctx.user.id, input.status);
+      }),
+
+    updateConsultationStatus: protectedProcedure
+      .input(z.object({
+        consultationId: z.number(),
+        status: z.enum(["confirmed", "completed", "cancelled", "no_show"]),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (!ctx.user?.id) {
+          throw new Error("User not authenticated");
+        }
+        return await updateConsultationStatus(input.consultationId, input.status);
       }),
   }),
 });

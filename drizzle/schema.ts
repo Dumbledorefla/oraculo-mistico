@@ -191,3 +191,157 @@ export const userProductsRelations = relations(userProducts, ({ one }) => ({
     references: [orders.id],
   }),
 }));
+
+/**
+ * Taromantes table - esoteric consultants/readers
+ */
+export const taromantes = mysqlTable("taromantes", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId"), // Link to user account if they have one
+  slug: varchar("slug", { length: 128 }).notNull().unique(),
+  name: varchar("name", { length: 256 }).notNull(),
+  title: varchar("title", { length: 256 }), // e.g., "Tarologa e Numerologa"
+  bio: text("bio"),
+  shortBio: varchar("shortBio", { length: 512 }),
+  photoUrl: text("photoUrl"),
+  specialties: json("specialties"), // Array of specialties: ["tarot", "numerologia", "astrologia"]
+  experience: int("experience"), // Years of experience
+  rating: decimal("rating", { precision: 2, scale: 1 }).default("5.0"),
+  totalReviews: int("totalReviews").default(0),
+  totalConsultations: int("totalConsultations").default(0),
+  pricePerHour: decimal("pricePerHour", { precision: 10, scale: 2 }).notNull(),
+  pricePerSession: decimal("pricePerSession", { precision: 10, scale: 2 }), // 30 min session
+  isActive: boolean("isActive").default(true),
+  isFeatured: boolean("isFeatured").default(false),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Taromante = typeof taromantes.$inferSelect;
+export type InsertTaromante = typeof taromantes.$inferInsert;
+
+/**
+ * Taromante availability - weekly schedule
+ */
+export const taromanteAvailability = mysqlTable("taromante_availability", {
+  id: int("id").autoincrement().primaryKey(),
+  taromanteId: int("taromanteId").notNull(),
+  dayOfWeek: int("dayOfWeek").notNull(), // 0 = Sunday, 6 = Saturday
+  startTime: varchar("startTime", { length: 5 }).notNull(), // "09:00"
+  endTime: varchar("endTime", { length: 5 }).notNull(), // "18:00"
+  isActive: boolean("isActive").default(true),
+});
+
+export type TaromanteAvailability = typeof taromanteAvailability.$inferSelect;
+export type InsertTaromanteAvailability = typeof taromanteAvailability.$inferInsert;
+
+/**
+ * Consultations table - scheduled consultations
+ */
+export const consultations = mysqlTable("consultations", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  taromanteId: int("taromanteId").notNull(),
+  scheduledAt: timestamp("scheduledAt").notNull(),
+  duration: int("duration").default(30).notNull(), // Duration in minutes
+  status: mysqlEnum("status", ["pending", "confirmed", "completed", "cancelled", "no_show"]).default("pending").notNull(),
+  consultationType: mysqlEnum("consultationType", ["video", "chat", "phone"]).default("video").notNull(),
+  topic: varchar("topic", { length: 256 }), // What the user wants to discuss
+  notes: text("notes"), // Taromante notes after consultation
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  stripeSessionId: varchar("stripeSessionId", { length: 256 }),
+  stripePaymentIntentId: varchar("stripePaymentIntentId", { length: 256 }),
+  paidAt: timestamp("paidAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Consultation = typeof consultations.$inferSelect;
+export type InsertConsultation = typeof consultations.$inferInsert;
+
+/**
+ * Consultation reviews - user reviews for taromantes
+ */
+export const consultationReviews = mysqlTable("consultation_reviews", {
+  id: int("id").autoincrement().primaryKey(),
+  consultationId: int("consultationId").notNull(),
+  userId: int("userId").notNull(),
+  taromanteId: int("taromanteId").notNull(),
+  rating: int("rating").notNull(), // 1-5 stars
+  comment: text("comment"),
+  isPublic: boolean("isPublic").default(true),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ConsultationReview = typeof consultationReviews.$inferSelect;
+export type InsertConsultationReview = typeof consultationReviews.$inferInsert;
+
+/**
+ * Taromante services - specific services offered
+ */
+export const taromanteServices = mysqlTable("taromante_services", {
+  id: int("id").autoincrement().primaryKey(),
+  taromanteId: int("taromanteId").notNull(),
+  name: varchar("name", { length: 256 }).notNull(),
+  description: text("description"),
+  duration: int("duration").notNull(), // Duration in minutes
+  price: decimal("price", { precision: 10, scale: 2 }).notNull(),
+  isActive: boolean("isActive").default(true),
+});
+
+export type TaromanteService = typeof taromanteServices.$inferSelect;
+export type InsertTaromanteService = typeof taromanteServices.$inferInsert;
+
+/**
+ * Relations for taromantes
+ */
+export const taromantesRelations = relations(taromantes, ({ one, many }) => ({
+  user: one(users, {
+    fields: [taromantes.userId],
+    references: [users.id],
+  }),
+  availability: many(taromanteAvailability),
+  consultations: many(consultations),
+  reviews: many(consultationReviews),
+  services: many(taromanteServices),
+}));
+
+export const taromanteAvailabilityRelations = relations(taromanteAvailability, ({ one }) => ({
+  taromante: one(taromantes, {
+    fields: [taromanteAvailability.taromanteId],
+    references: [taromantes.id],
+  }),
+}));
+
+export const consultationsRelations = relations(consultations, ({ one }) => ({
+  user: one(users, {
+    fields: [consultations.userId],
+    references: [users.id],
+  }),
+  taromante: one(taromantes, {
+    fields: [consultations.taromanteId],
+    references: [taromantes.id],
+  }),
+}));
+
+export const consultationReviewsRelations = relations(consultationReviews, ({ one }) => ({
+  consultation: one(consultations, {
+    fields: [consultationReviews.consultationId],
+    references: [consultations.id],
+  }),
+  user: one(users, {
+    fields: [consultationReviews.userId],
+    references: [users.id],
+  }),
+  taromante: one(taromantes, {
+    fields: [consultationReviews.taromanteId],
+    references: [taromantes.id],
+  }),
+}));
+
+export const taromanteServicesRelations = relations(taromanteServices, ({ one }) => ({
+  taromante: one(taromantes, {
+    fields: [taromanteServices.taromanteId],
+    references: [taromantes.id],
+  }),
+}));
