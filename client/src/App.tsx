@@ -8,8 +8,9 @@ import Home from "./pages/Home";
 import TarotGame from "./pages/TarotGame";
 import Numerology from "./pages/Numerology";
 import Horoscope from "./pages/Horoscope";
-
+import Profile from "./pages/Profile";
 function Router() {
+  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path="/" component={Home} />
@@ -24,6 +25,7 @@ function Router() {
       </Route>
       <Route path="/numerologia" component={Numerology} />
       <Route path="/horoscopo" component={Horoscope} />
+      <Route path="/perfil" component={Profile} />
       <Route path="/mapa-astral">
         {() => (
           <div className="min-h-screen bg-background flex items-center justify-center">

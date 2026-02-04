@@ -21,6 +21,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { majorArcana, TarotCard, getRandomCards } from "@/data/tarotCardsExpanded";
 import { tarotSpreads, getSpreadById } from "@/data/tarotSpreads";
 import { useReadingHistory } from "@/hooks/useReadingHistory";
+import { useSaveTarotReading } from "@/hooks/useSaveTarotReading";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { toast } from "sonner";
 
 type GamePhase = "intro" | "spread-select" | "mentalize" | "shuffle" | "select" | "result" | "history";
@@ -38,6 +40,8 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
   const [revealedCards, setRevealedCards] = useState<TarotCard[]>([]);
   const [question, setQuestion] = useState("");
   const { addReading, history, deleteReading } = useReadingHistory();
+  const { saveReading } = useSaveTarotReading();
+  const { isAuthenticated } = useAuth();
 
   const spreadId = gameType === "dia" ? "daily" : gameType === "amor" ? "love" : gameType === "completo" ? "complete" : gameType === "celtic" ? "celtic-cross" : "life-path";
   const spread = getSpreadById(spreadId);
@@ -82,14 +86,29 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
           setRevealedCards([...selectedCards, card]);
           setPhase("result");
           
-          // Salvar no histórico
+          // Salvar no histórico local
+          const selectedCardsList = [...selectedCards, card];
           addReading({
             spreadType: spreadId,
             spreadName: gameTitle,
-            cards: [...selectedCards, card].map(c => c.id),
-            cardNames: [...selectedCards, card].map(c => c.name),
+            cards: selectedCardsList.map(c => c.id),
+            cardNames: selectedCardsList.map(c => c.name),
             question: question || undefined
           });
+          
+          // Salvar no backend se autenticado
+          if (isAuthenticated) {
+            saveReading({
+              readingType: spreadId,
+              cards: selectedCardsList.map(c => ({
+                id: c.id,
+                name: c.name,
+                meaning: c.meaning
+              })),
+              interpretation: question || undefined,
+              userName: userName || undefined
+            });
+          }
         }, 500);
       }
     }

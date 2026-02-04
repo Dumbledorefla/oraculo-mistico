@@ -1,6 +1,7 @@
 /**
  * Página Inicial - Oráculo Místico
  * Design: Neo-Mysticism - Experiência premium com fundos celestiais e animações fluidas
+ * Autenticação: Manus OAuth integrado
  */
 
 import { motion } from "framer-motion";
@@ -15,10 +16,14 @@ import {
   ArrowRight,
   Compass,
   Eye,
-  Zap
+  Zap,
+  LogOut
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { getLoginUrl } from "@/const";
+import { trpc } from "@/lib/trpc";
 
 // Background images - Mystical celestial theme
 const HERO_BG = "https://private-us-east-1.manuscdn.com/sessionFile/Vf2iwFJXfxabWANoxH8Y4R/sandbox/oAoxzsDB1OO28cezWUejbN-img-1_1770155958000_na1fn_bXlzdGljYWwtaGVyby1iZw.png?x-oss-process=image/resize,w_1920,h_1920/format,webp/quality,q_80&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvVmYyaXdGSlhmeGFiV0FOb3hIOFk0Ui9zYW5kYm94L29Bb3h6c0RCMU9PMjhjZXpXVWVqYk4taW1nLTFfMTc3MDE1NTk1ODAwMF9uYTFmbl9iWGx6ZEdsallXd3RhR1Z5YnkxaVp3LnBuZz94LW9zcy1wcm9jZXNzPWltYWdlL3Jlc2l6ZSx3XzE5MjAsaF8xOTIwL2Zvcm1hdCx3ZWJwL3F1YWxpdHkscV84MCIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc5ODc2MTYwMH19fV19&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=Fk0o7sgK9Csj9~KyI4F2T2fJJff8wXmETE3WvWe~WsWx1qJtWU8t9FAKjoTa8RJEgmJQtBFNhoDrTIp0Px1mfMNxn5-Ih~03ccjyLAmv~OpzsW1N6ANC23VBlv4Vspv1Cz0vn0tbf3audhiejE8hAulgfzdyQDiIgtMEva6XTFwiovfCS-mpTMwfTziBTAR13EafllIRL0ynt5u0ZYv1kPhcaqzp~yuQ3225hKrJB0Esbge~ccdkHMj8XKBVBb4wdLMLJToyN2~Qxg65Wtz8QlzDD8ZVKb-dt89sQHD~bYRdEHQ~-PJIr74JR1nILHZeTxDD343STS6vnuynIToV0w__";
@@ -146,6 +151,14 @@ function AnimatedStars() {
 }
 
 export default function Home() {
+  const { user, isAuthenticated, logout } = useAuth();
+  const logoutMutation = trpc.auth.logout.useMutation();
+
+  const handleLogout = async () => {
+    await logoutMutation.mutateAsync();
+    window.location.href = "/";
+  };
+
   return (
     <div className="min-h-screen relative">
       {/* Global mystical background */}
@@ -187,12 +200,35 @@ export default function Home() {
             </Link>
           </nav>
 
-          <Button 
-            size="sm" 
-            className="bg-primary text-primary-foreground hover:bg-primary/90 border border-primary/50"
-          >
-            Entrar
-          </Button>
+          <div className="flex items-center gap-3">
+            {isAuthenticated && user ? (
+              <>
+                <Link href="/perfil">
+                  <span className="text-sm text-white/70 hover:text-primary transition-colors cursor-pointer">
+                    Olá, <span className="text-primary font-semibold">{user.name || user.email}</span>
+                  </span>
+                </Link>
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  className="border-white/30 text-white hover:bg-white/10"
+                  onClick={handleLogout}
+                  disabled={logoutMutation.isPending}
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sair
+                </Button>
+              </>
+            ) : (
+              <Button 
+                size="sm" 
+                className="bg-primary text-primary-foreground hover:bg-primary/90 border border-primary/50"
+                onClick={() => window.location.href = getLoginUrl()}
+              >
+                Entrar
+              </Button>
+            )}
+          </div>
         </div>
       </header>
 
