@@ -4,16 +4,31 @@ import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { CartProvider } from "./contexts/CartContext";
 import Home from "./pages/Home";
 import TarotGame from "./pages/TarotGame";
 import Numerology from "./pages/Numerology";
 import Horoscope from "./pages/Horoscope";
 import Profile from "./pages/Profile";
+import Catalog from "./pages/Catalog";
+import ProductDetail from "./pages/ProductDetail";
+import Sample from "./pages/Sample";
+import Cart from "./pages/Cart";
+import CheckoutSuccess from "./pages/CheckoutSuccess";
+import MyProducts from "./pages/MyProducts";
+
 function Router() {
-  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path="/" component={Home} />
+      {/* Catálogo de Produtos */}
+      <Route path="/mapas-jogos" component={Catalog} />
+      <Route path="/produto/:slug" component={ProductDetail} />
+      <Route path="/amostra/:slug" component={Sample} />
+      <Route path="/carrinho" component={Cart} />
+      <Route path="/checkout/sucesso" component={CheckoutSuccess} />
+      <Route path="/meus-produtos" component={MyProducts} />
+      {/* Tarot */}
       <Route path="/tarot/dia">
         {() => <TarotGame gameType="dia" />}
       </Route>
@@ -23,6 +38,7 @@ function Router() {
       <Route path="/tarot/completo">
         {() => <TarotGame gameType="completo" />}
       </Route>
+      {/* Outros */}
       <Route path="/numerologia" component={Numerology} />
       <Route path="/horoscopo" component={Horoscope} />
       <Route path="/perfil" component={Profile} />
@@ -46,10 +62,12 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="dark">
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+        <CartProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </CartProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );
