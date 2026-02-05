@@ -1,5 +1,8 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, json, decimal, boolean } from "drizzle-orm/mysql-core";
+import { mysqlTable, varchar, text, int, timestamp, mysqlEnum, json, decimal, boolean } from "drizzle-orm/mysql-core";
 import { relations } from "drizzle-orm";
+
+// Export payment-related tables
+export * from "./schema-payments";
 
 /**
  * Core user table backing auth flow.

@@ -46,9 +46,11 @@ import {
   getUserLessonProgress
 } from "./db";
 import { createCheckoutSession, createConsultationCheckoutSession, createCourseCheckoutSession } from "./stripe/stripe";
+import { adminRouter } from "./routers/admin";
 
 export const appRouter = router({
   system: systemRouter,
+  admin: adminRouter,
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {

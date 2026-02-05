@@ -146,3 +146,58 @@
 - [x] Adicionar submenu dropdown para categorias
 - [x] Melhorar navegação entre páginas
 - [ ] Adicionar breadcrumbs nas páginas internas
+
+
+---
+
+## Fase 6 - Sistema de Pagamentos Multi-Gateway e Admin Completo
+
+### Sistema de Pagamentos Avançado
+- [ ] Criar schema de pagamentos no banco (payment_methods, pix_transactions, payment_proofs, mercado_pago_transactions, webhook_logs)
+- [ ] Implementar serviço de PIX direto com QR Code
+- [ ] Implementar integração com Mercado Pago (PIX, boleto, cartão)
+- [ ] Criar sistema de upload de comprovante manual
+- [ ] Implementar webhooks para confirmação automática de PIX
+- [ ] Criar página de checkout multi-gateway
+- [ ] Implementar seleção de método de pagamento
+- [ ] Criar página de status de pagamento em tempo real
+
+### Painel Administrativo Completo
+- [ ] Criar router admin com middleware de autorização
+- [ ] Implementar endpoint admin.getStats (estatísticas do dashboard)
+- [ ] Implementar endpoint admin.listUsers (com filtros e paginação)
+- [ ] Implementar endpoint admin.blockUser
+- [ ] Implementar endpoint admin.updateUserRole
+- [ ] Implementar endpoint admin.listGames (estatísticas de jogos)
+- [ ] Implementar endpoint admin.listConsultations (com filtros)
+- [ ] Implementar endpoint admin.updateConsultationStatus
+- [ ] Implementar endpoint admin.listPayments (todos os gateways)
+- [ ] Implementar endpoint admin.approvePaymentProof
+- [ ] Implementar endpoint admin.updateSettings
+
+### Interfaces do Admin Panel
+- [ ] Criar página AdminDashboard com estatísticas reais
+- [ ] Criar página Users com listagem e ações (bloquear, promover)
+- [ ] Criar página Games com estatísticas de uso
+- [ ] Criar página Consultations com gestão de agendamentos
+- [ ] Criar página Payments com todos os métodos de pagamento
+- [ ] Criar página PaymentProofs para revisar comprovantes
+- [ ] Criar página Settings com configurações do site
+
+### Email Marketing com SendGrid
+- [ ] Criar templates de email místicos (HTML + CSS)
+- [ ] Implementar email de boas-vindas automático
+- [ ] Criar sequência de conversão (24h, 3 dias, 7 dias)
+- [ ] Implementar email de confirmação de pagamento
+- [ ] Criar email de lembrete de consulta
+- [ ] Implementar interface admin para gerenciar campanhas
+- [ ] Criar sistema de segmentação de usuários
+
+### Documentação e Deploy
+- [ ] Criar SETUP.md completo com instruções passo a passo
+- [ ] Documentar configuração de cada gateway de pagamento
+- [ ] Criar script de migração do banco de dados
+- [ ] Documentar webhooks e como configurá-los
+- [ ] Criar guia de configuração do SendGrid
+- [ ] Preparar pacote ZIP com código completo
+- [ ] Testar deploy completo em ambiente limpo
