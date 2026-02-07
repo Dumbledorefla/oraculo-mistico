@@ -150,54 +150,41 @@
 
 ---
 
-## Fase 6 - Sistema de Pagamentos Multi-Gateway e Admin Completo
+## Fase 6 - Melhorias de Design e Freemium
 
-### Sistema de Pagamentos Avançado
-- [ ] Criar schema de pagamentos no banco (payment_methods, pix_transactions, payment_proofs, mercado_pago_transactions, webhook_logs)
-- [ ] Implementar serviço de PIX direto com QR Code
-- [ ] Implementar integração com Mercado Pago (PIX, boleto, cartão)
-- [ ] Criar sistema de upload de comprovante manual
-- [ ] Implementar webhooks para confirmação automática de PIX
-- [ ] Criar página de checkout multi-gateway
-- [ ] Implementar seleção de método de pagamento
-- [ ] Criar página de status de pagamento em tempo real
+### Personalização Auth0
+- [x] Personalizar tela de login do Auth0 com design místico
 
-### Painel Administrativo Completo
-- [ ] Criar router admin com middleware de autorização
-- [ ] Implementar endpoint admin.getStats (estatísticas do dashboard)
-- [ ] Implementar endpoint admin.listUsers (com filtros e paginação)
-- [ ] Implementar endpoint admin.blockUser
-- [ ] Implementar endpoint admin.updateUserRole
-- [ ] Implementar endpoint admin.listGames (estatísticas de jogos)
-- [ ] Implementar endpoint admin.listConsultations (com filtros)
-- [ ] Implementar endpoint admin.updateConsultationStatus
-- [ ] Implementar endpoint admin.listPayments (todos os gateways)
-- [ ] Implementar endpoint admin.approvePaymentProof
-- [ ] Implementar endpoint admin.updateSettings
+### Modelo Freemium para Tarot
+- [x] Implementar paywall nos jogos de Tarot (exceto Tarot Diário)
+- [x] Adicionar campo de data de nascimento em todos os jogos premium
+- [x] Criar componente TarotPaywall
 
-### Interfaces do Admin Panel
-- [ ] Criar página AdminDashboard com estatísticas reais
-- [ ] Criar página Users com listagem e ações (bloquear, promover)
-- [ ] Criar página Games com estatísticas de uso
-- [ ] Criar página Consultations com gestão de agendamentos
-- [ ] Criar página Payments com todos os métodos de pagamento
-- [ ] Criar página PaymentProofs para revisar comprovantes
-- [ ] Criar página Settings com configurações do site
+### Design das Cartas
+- [x] Mudar cores das cartas para design mais místico (roxo)
+- [x] Atualizar paleta de cores das cartas de Tarot
 
-### Email Marketing com SendGrid
-- [ ] Criar templates de email místicos (HTML + CSS)
-- [ ] Implementar email de boas-vindas automático
-- [ ] Criar sequência de conversão (24h, 3 dias, 7 dias)
-- [ ] Implementar email de confirmação de pagamento
-- [ ] Criar email de lembrete de consulta
-- [ ] Implementar interface admin para gerenciar campanhas
-- [ ] Criar sistema de segmentação de usuários
+### Deploy
+- [x] Fazer deploy e testar no chavedooraculo.com
 
-### Documentação e Deploy
-- [ ] Criar SETUP.md completo com instruções passo a passo
-- [ ] Documentar configuração de cada gateway de pagamento
-- [ ] Criar script de migração do banco de dados
-- [ ] Documentar webhooks e como configurá-los
-- [ ] Criar guia de configuração do SendGrid
-- [ ] Preparar pacote ZIP com código completo
-- [ ] Testar deploy completo em ambiente limpo
+
+---
+
+## Fase 7 - Logo Auth0 e Painel Admin
+
+### Logo Auth0
+- [x] Criar logo do Chave do Oráculo
+- [x] Fazer upload no Auth0
+- [x] Testar tela de login
+
+### Painel Admin
+- [x] Criar estrutura do painel admin (/admin)
+- [x] Implementar autenticação admin (verificar role)
+- [x] Dashboard com estatísticas gerais
+- [x] Gestão de usuários (listar, editar, bloquear)
+- [x] Gestão de jogos (ativar/desativar, estatísticas)
+- [x] Gestão de consultas (listar, aprovar, cancelar)
+- [x] Gestão de pagamentos (listar transações, reembolsos)
+- [x] Gestão de assinaturas (ativas, canceladas, renovações)
+- [x] Configurações do site (preços, textos, emails)
+- [ ] Deploy e teste do painel admin

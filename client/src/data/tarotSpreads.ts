@@ -37,7 +37,7 @@ export const tarotSpreads: Spread[] = [
     name: "Tarot e o Amor",
     description: "Explore as energias que cercam sua vida amorosa com 3 cartas",
     cardCount: 3,
-    isPremium: false,
+    isPremium: true,
     positions: [
       {
         id: 1,

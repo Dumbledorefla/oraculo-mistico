@@ -24,30 +24,33 @@ import { useReadingHistory } from "@/hooks/useReadingHistory";
 import { useSaveTarotReading } from "@/hooks/useSaveTarotReading";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { toast } from "sonner";
+import TarotPaywall from "@/components/TarotPaywall";
 
-type GamePhase = "intro" | "spread-select" | "mentalize" | "shuffle" | "select" | "result" | "history";
+type GamePhase = "paywall" | "intro" | "spread-select" | "mentalize" | "shuffle" | "select" | "result" | "history";
 
 interface TarotGameProps {
   gameType?: "dia" | "amor" | "completo" | "celtic" | "life-path";
 }
 
 export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
-  const [phase, setPhase] = useState<GamePhase>("intro");
-  const [userName, setUserName] = useState("");
-  const [shuffledCards, setShuffledCards] = useState<TarotCard[]>([]);
-  const [selectedCards, setSelectedCards] = useState<TarotCard[]>([]);
-  const [isShuffling, setIsShuffling] = useState(false);
-  const [revealedCards, setRevealedCards] = useState<TarotCard[]>([]);
-  const [question, setQuestion] = useState("");
+  const { isAuthenticated } = useAuth();
   const { addReading, history, deleteReading } = useReadingHistory();
   const { saveReading } = useSaveTarotReading();
-  const { isAuthenticated } = useAuth();
 
   const spreadId = gameType === "dia" ? "daily" : gameType === "amor" ? "love" : gameType === "completo" ? "complete" : gameType === "celtic" ? "celtic-cross" : "life-path";
   const spread = getSpreadById(spreadId);
   const cardsToSelect = spread?.cardCount || 1;
   const gameTitle = spread?.name || "Tarot";
   const isPremium = spread?.isPremium || false;
+
+  const [phase, setPhase] = useState<GamePhase>(isPremium && !isAuthenticated ? "paywall" : "intro");
+  const [birthDate, setBirthDate] = useState("");
+  const [userName, setUserName] = useState("");
+  const [shuffledCards, setShuffledCards] = useState<TarotCard[]>([]);
+  const [selectedCards, setSelectedCards] = useState<TarotCard[]>([]);
+  const [isShuffling, setIsShuffling] = useState(false);
+  const [revealedCards, setRevealedCards] = useState<TarotCard[]>([]);
+  const [question, setQuestion] = useState("");
 
   // Shuffle cards on mount
   useEffect(() => {
@@ -58,6 +61,10 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
   const handleStartGame = () => {
     if (!userName.trim()) {
       toast.error("Por favor, insira seu nome para continuar.");
+      return;
+    }
+    if (isPremium && !birthDate.trim()) {
+      toast.error("Por favor, insira sua data de nascimento para continuar.");
       return;
     }
     setPhase("mentalize");
@@ -165,6 +172,14 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
 
         <div className="container mx-auto px-4 py-12">
           <AnimatePresence mode="wait">
+            {/* Paywall Phase */}
+            {phase === "paywall" && (
+              <TarotPaywall 
+                gameName={gameTitle}
+                onUnlock={() => setPhase("intro")}
+              />
+            )}
+
             {/* Intro Phase */}
             {phase === "intro" && (
               <motion.div
@@ -200,6 +215,20 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                           onKeyPress={(e) => e.key === "Enter" && handleStartGame()}
                         />
                       </div>
+
+                      {isPremium && (
+                        <div>
+                          <label className="text-gray-300 text-sm font-medium mb-2 block">
+                            Data de Nascimento
+                          </label>
+                          <Input
+                            type="date"
+                            value={birthDate}
+                            onChange={(e) => setBirthDate(e.target.value)}
+                            className="bg-purple-900/50 border-yellow-500/30 text-white placeholder:text-gray-500"
+                          />
+                        </div>
+                      )}
 
                       {(gameType === "amor" || gameType === "completo" || gameType === "celtic" || gameType === "life-path") && (
                         <div>
@@ -315,7 +344,7 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
-                      <div className="w-full aspect-[3/4] bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center shadow-lg shadow-yellow-500/50 group-hover:shadow-yellow-500/80 transition-all cursor-pointer">
+                      <div className="w-full aspect-[3/4] bg-gradient-to-br from-purple-600 to-purple-800 rounded-lg flex items-center justify-center shadow-lg shadow-purple-500/50 group-hover:shadow-purple-500/80 transition-all cursor-pointer">
                         <Sparkles className="w-8 h-8 text-white" />
                       </div>
                       {selectedCards.includes(card) && (

@@ -22,7 +22,7 @@ import TaromantePanel from "./pages/TaromantePanel";
 import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
 import CourseLesson from "./pages/CourseLesson";
-import AdminPanel from "./pages/AdminPanel";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 function Router() {
   return (
@@ -74,7 +74,7 @@ function Router() {
         {() => <TarotGame gameType="completo" />}
       </Route>
       {/* Admin */}
-      <Route path="/admin" component={AdminPanel} />
+      <Route path="/admin" component={AdminDashboard} />
       {/* Outros */}
       <Route path="/numerologia" component={Numerology} />
       <Route path="/horoscopo" component={Horoscope} />
