@@ -188,3 +188,24 @@
 - [x] Gestão de assinaturas (ativas, canceladas, renovações)
 - [x] Configurações do site (preços, textos, emails)
 - [ ] Deploy e teste do painel admin
+
+
+---
+
+## Fase 8 - Personalização Completa Auth0
+
+### Domínio Customizado
+- [x] Verificar domínio auth.chavedooraculo.com no Auth0 (já estava READY)
+- [x] Configurar VITE_AUTH0_DOMAIN para auth.chavedooraculo.com
+
+### Tema Místico no Universal Login
+- [x] Configurar cores primárias (roxo #8B5CF6, dourado #d4a853)
+- [x] Adicionar imagem de fundo com nebulosa celestial
+- [x] Configurar logo do Chave do Oráculo (80px)
+- [x] Configurar bordas douradas no widget
+- [x] Publicar tema no Auth0
+
+### Variáveis de Ambiente
+- [x] Atualizar VITE_AUTH0_DOMAIN no projeto Manus
+- [ ] Atualizar VITE_AUTH0_DOMAIN no Vercel (dashboard temporariamente indisponível)
+- [ ] Fazer deploy com novo domínio no Vercel
