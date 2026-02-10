@@ -344,3 +344,32 @@
 - [x] Atualizar AdminPanel.tsx (referências amber restantes)
 - [x] Verificar consistência visual em todas as páginas
 - [x] Testar navegação e aparência geral
+
+## Páginas de Destino dos Upsells (CONCLUÍDO)
+- [x] Criar página /tarot/completo com checkout Stripe
+  - [ ] Hero section com título e descrição impactante
+  - [ ] Seção de benefícios (o que está incluído)
+  - [ ] Seção de como funciona (passo a passo)
+  - [ ] Seção de depoimentos
+  - [ ] Seção de FAQ
+  - [ ] CTA de compra com preço e botão de checkout
+- [x] Criar página /numerologia/completa com checkout Stripe
+  - [ ] Hero section com título e descrição impactante
+  - [ ] Seção de benefícios (o que está incluído)
+  - [ ] Seção de como funciona (passo a passo)
+  - [ ] Seção de depoimentos
+  - [ ] Seção de FAQ
+  - [ ] CTA de compra com preço e botão de checkout
+- [x] Criar página /mapa-astral com checkout Stripe
+  - [ ] Hero section com título e descrição impactante
+  - [ ] Seção de benefícios (o que está incluído)
+  - [ ] Seção de como funciona (passo a passo)
+  - [ ] Seção de depoimentos
+  - [ ] Seção de FAQ
+  - [ ] CTA de compra com preço e botão de checkout
+- [ ] Configurar produtos no Stripe (preços e IDs)
+- [x] Criar procedimento tRPC para gerar checkout sessions
+- [x] Adicionar rotas no App.tsx
+- [x] Testar fluxo completo de checkout
+- [x] Criar testes vitest para router de payments
+- [x] Todos os testes passando

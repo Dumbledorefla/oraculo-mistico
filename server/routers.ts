@@ -228,8 +228,8 @@ export const appRouter = router({
         const checkoutUrl = await createCheckoutSession({
           items: input.items,
           userId: ctx.user.id,
-          userEmail: ctx.user.email,
-          userName: ctx.user.name || "Cliente",
+          userEmail: ctx.user.email ?? "",
+          userName: ctx.user.name ?? "Cliente",
           origin,
         });
 
@@ -390,8 +390,8 @@ export const appRouter = router({
           topic: input.topic,
           price: input.price,
           userId: ctx.user.id,
-          userEmail: ctx.user.email,
-          userName: ctx.user.name || "Cliente",
+          userEmail: ctx.user.email ?? "",
+          userName: ctx.user.name ?? "Cliente",
           origin,
         });
 
@@ -657,12 +657,42 @@ export const appRouter = router({
           courseDescription: input.courseDescription || "",
           price: input.price,
           userId: ctx.user.id,
-          userEmail: ctx.user.email,
-          userName: ctx.user.name || "Cliente",
+          userEmail: ctx.user.email ?? "",
+          userName: ctx.user.name ?? "Cliente",
           origin,
         });
 
         return { checkoutUrl };
+      }),
+  }),
+
+  // Payments router
+  payments: router({ createCheckoutSession: protectedProcedure
+      .input(z.object({
+        productName: z.string(),
+        price: z.number(),
+        successUrl: z.string(),
+        cancelUrl: z.string(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (!ctx.user?.id) {
+          throw new Error("User not authenticated");
+        }
+
+        const origin = ctx.req.headers.origin || "https://chavedooraculo.com";
+
+        const checkoutUrl = await createCheckoutSession({
+          productName: input.productName,
+          productDescription: `Acesso premium a ${input.productName}`,
+          price: input.price,
+          userId: ctx.user.id,
+          userEmail: ctx.user.email ?? "",
+          userName: ctx.user.name ?? "Cliente",
+          successUrl: input.successUrl,
+          cancelUrl: input.cancelUrl,
+        });
+
+        return { url: checkoutUrl };
       }),
   }),
 

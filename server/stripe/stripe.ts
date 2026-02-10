@@ -33,10 +33,72 @@ export interface CreateCheckoutParams {
   origin: string;
 }
 
+export interface CreateSimpleCheckoutParams {
+  productName: string;
+  productDescription: string;
+  price: number;
+  userId: number;
+  userEmail: string;
+  userName: string;
+  successUrl: string;
+  cancelUrl: string;
+}
+
 /**
- * Create a Stripe Checkout Session
+ * Create a Stripe Checkout Session (overloaded)
  */
-export async function createCheckoutSession(params: CreateCheckoutParams): Promise<string> {
+export async function createCheckoutSession(params: CreateCheckoutParams | CreateSimpleCheckoutParams): Promise<string> {
+  // Check if it's a simple checkout (single product)
+  if ('productName' in params) {
+    return createSimpleCheckout(params);
+  }
+  
+  // Original multi-item checkout
+  return createMultiItemCheckout(params);
+}
+
+/**
+ * Create a simple single-product checkout
+ */
+async function createSimpleCheckout(params: CreateSimpleCheckoutParams): Promise<string> {
+  const { productName, productDescription, price, userId, userEmail, userName, successUrl, cancelUrl } = params;
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: [
+      {
+        price_data: {
+          currency: "brl",
+          product_data: {
+            name: productName,
+            description: productDescription,
+          },
+          unit_amount: Math.round(price * 100), // Convert to cents
+        },
+        quantity: 1,
+      },
+    ],
+    mode: "payment",
+    success_url: successUrl,
+    cancel_url: cancelUrl,
+    customer_email: userEmail,
+    client_reference_id: userId.toString(),
+    allow_promotion_codes: true,
+    metadata: {
+      user_id: userId.toString(),
+      customer_email: userEmail,
+      customer_name: userName,
+      product_name: productName,
+    },
+  });
+
+  return session.url || "";
+}
+
+/**
+ * Create a multi-item checkout session
+ */
+async function createMultiItemCheckout(params: CreateCheckoutParams): Promise<string> {
   const { items, userId, userEmail, userName, origin } = params;
 
   // Build line items from cart

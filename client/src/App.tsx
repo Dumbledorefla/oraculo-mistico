@@ -23,6 +23,9 @@ import Courses from "./pages/Courses";
 import CourseDetail from "./pages/CourseDetail";
 import CourseLesson from "./pages/CourseLesson";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import TarotCompleto from "./pages/TarotCompleto";
+import NumerologiaCompleta from "./pages/NumerologiaCompleta";
+import MapaAstral from "./pages/MapaAstral";
 
 function Router() {
   return (
@@ -70,9 +73,9 @@ function Router() {
       <Route path="/tarot/amor">
         {() => <TarotGame gameType="amor" />}
       </Route>
-      <Route path="/tarot/completo">
-        {() => <TarotGame gameType="completo" />}
-      </Route>
+      <Route path="/tarot/completo" component={TarotCompleto} />
+      <Route path="/numerologia/completa" component={NumerologiaCompleta} />
+      <Route path="/mapa-astral" component={MapaAstral} />
       {/* Admin */}
       <Route path="/admin" component={AdminDashboard} />
       {/* Outros */}
