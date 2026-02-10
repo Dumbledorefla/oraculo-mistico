@@ -1,7 +1,6 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import { getLoginUrl } from "@/const";
-import { trpc } from "@/lib/trpc";
-import { TRPCClientError } from "@trpc/client";
-import { useCallback, useEffect, useMemo } from "react";
+import { useEffect } from "react";
 
 type UseAuthOptions = {
   redirectOnUnauthenticated?: boolean;
@@ -11,74 +10,62 @@ type UseAuthOptions = {
 export function useAuth(options?: UseAuthOptions) {
   const { redirectOnUnauthenticated = false, redirectPath = getLoginUrl() } =
     options ?? {};
-  const utils = trpc.useUtils();
+  
+  const {
+    user: auth0User,
+    isLoading,
+    isAuthenticated,
+    error,
+    logout: auth0Logout,
+  } = useAuth0();
 
-  const meQuery = trpc.auth.me.useQuery(undefined, {
-    retry: false,
-    refetchOnWindowFocus: false,
-  });
+  // Convert Auth0 user to our user format
+  const user = auth0User ? {
+    id: auth0User.sub || '',
+    email: auth0User.email || '',
+    name: auth0User.name || '',
+    picture: auth0User.picture || '',
+    role: (auth0User['https://chavedooraculo.com/role'] as 'admin' | 'user') || 'user',
+    createdAt: auth0User.updated_at || new Date().toISOString(),
+  } : null;
 
-  const logoutMutation = trpc.auth.logout.useMutation({
-    onSuccess: () => {
-      utils.auth.me.setData(undefined, null);
-    },
-  });
-
-  const logout = useCallback(async () => {
-    try {
-      await logoutMutation.mutateAsync();
-    } catch (error: unknown) {
-      if (
-        error instanceof TRPCClientError &&
-        error.data?.code === "UNAUTHORIZED"
-      ) {
-        return;
+  const logout = async () => {
+    auth0Logout({
+      logoutParams: {
+        returnTo: window.location.origin
       }
-      throw error;
-    } finally {
-      utils.auth.me.setData(undefined, null);
-      await utils.auth.me.invalidate();
-    }
-  }, [logoutMutation, utils]);
-
-  const state = useMemo(() => {
-    localStorage.setItem(
-      "manus-runtime-user-info",
-      JSON.stringify(meQuery.data)
-    );
-    return {
-      user: meQuery.data ?? null,
-      loading: meQuery.isLoading || logoutMutation.isPending,
-      error: meQuery.error ?? logoutMutation.error ?? null,
-      isAuthenticated: Boolean(meQuery.data),
-    };
-  }, [
-    meQuery.data,
-    meQuery.error,
-    meQuery.isLoading,
-    logoutMutation.error,
-    logoutMutation.isPending,
-  ]);
+    });
+  };
 
   useEffect(() => {
     if (!redirectOnUnauthenticated) return;
-    if (meQuery.isLoading || logoutMutation.isPending) return;
-    if (state.user) return;
+    if (isLoading) return;
+    if (user) return;
     if (typeof window === "undefined") return;
     if (window.location.pathname === redirectPath) return;
 
-    window.location.href = redirectPath
+    window.location.href = redirectPath;
   }, [
     redirectOnUnauthenticated,
     redirectPath,
-    logoutMutation.isPending,
-    meQuery.isLoading,
-    state.user,
+    isLoading,
+    user,
   ]);
 
+  // Store user info in localStorage for compatibility
+  useEffect(() => {
+    localStorage.setItem(
+      "manus-runtime-user-info",
+      JSON.stringify(user)
+    );
+  }, [user]);
+
   return {
-    ...state,
-    refresh: () => meQuery.refetch(),
+    user,
+    loading: isLoading,
+    error: error || null,
+    isAuthenticated,
+    refresh: () => {}, // Auth0 handles refresh automatically
     logout,
   };
 }

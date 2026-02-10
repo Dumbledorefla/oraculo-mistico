@@ -22,8 +22,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { getLoginUrl } from "@/const";
-import { trpc } from "@/lib/trpc";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const navItems = [
   { 
@@ -49,11 +48,15 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
   
-  const logoutMutation = trpc.auth.logout.useMutation();
+  const { loginWithRedirect } = useAuth0();
+  const { logout } = useAuth();
 
   const handleLogout = async () => {
-    await logoutMutation.mutateAsync();
-    window.location.href = "/";
+    await logout();
+  };
+
+  const handleLogin = () => {
+    loginWithRedirect();
   };
 
   const toggleSubmenu = (label: string) => {
@@ -133,7 +136,6 @@ export default function Header() {
                 variant="outline"
                 className="border-white/30 text-white hover:bg-white/10"
                 onClick={handleLogout}
-                disabled={logoutMutation.isPending}
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Sair
@@ -143,7 +145,7 @@ export default function Header() {
             <Button 
               size="sm" 
               className="bg-primary text-primary-foreground hover:bg-primary/90 border border-primary/50"
-              onClick={() => window.location.href = getLoginUrl()}
+              onClick={handleLogin}
             >
               Entrar
             </Button>
@@ -250,7 +252,7 @@ export default function Header() {
                   <Button 
                     className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
                     onClick={() => {
-                      window.location.href = getLoginUrl();
+                      handleLogin();
                       setMobileMenuOpen(false);
                     }}
                   >

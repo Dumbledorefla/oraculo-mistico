@@ -311,3 +311,15 @@
 - [ ] Revisar mensagens de erro (tornar acolhedoras)
 - [ ] Revisar textos de loading/processamento
 - [ ] Buscar e substituir textos genéricos por mensagens acolhedoras
+
+
+---
+
+## Simplificação de Arquitetura Auth0 (EM ANDAMENTO)
+- [x] Instalar @auth0/auth0-react no frontend
+- [x] Criar AuthProvider com Auth0Provider
+- [x] Atualizar useAuth para usar Auth0 SDK
+- [x] Remover dependência do servidor Express para autenticação
+- [x] Atualizar vercel.json para SPA puro
+- [ ] Testar login/logout no ambiente local
+- [ ] Fazer deploy e testar em produção
