@@ -4,6 +4,9 @@ import { relations } from "drizzle-orm";
 // Export payment-related tables
 export * from "./schema-payments";
 
+// Export admin-related tables
+export * from "./schema-admin";
+
 /**
  * Core user table backing auth flow.
  */
@@ -14,6 +17,9 @@ export const users = mysqlTable("users", {
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  isBanned: boolean("isBanned").default(false),
+  banReason: text("banReason"),
+  bannedAt: timestamp("bannedAt"),
   fullName: text("fullName"), // OB1: Nome completo do usuário
   birthDate: date("birthDate"), // OB1: Data de nascimento do usuário
   createdAt: timestamp("createdAt").defaultNow().notNull(),

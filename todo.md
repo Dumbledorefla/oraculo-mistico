@@ -388,16 +388,74 @@
 - [x] Testar acesso ao painel /admin
 - [x] Verificar permissões de admin funcionando corretamente
 
-## Painel Admin Funcional (Tarefa Atual)
-- [ ] Analisar schema atual do banco de dados
-- [ ] Analisar componentes admin existentes
-- [ ] Criar procedures tRPC admin protegidas (adminProcedure)
-- [ ] Implementar gerenciamento de usuários (listar, banir/desbanir, alterar role, ver detalhes)
-- [ ] Implementar gerenciamento de jogos/leituras (listar, ver detalhes, filtrar por data)
-- [ ] Implementar gerenciamento de consultas (listar, aprovar/recusar, ver detalhes)
-- [ ] Implementar gerenciamento de pagamentos (listar transações reais do Stripe)
-- [ ] Implementar estatísticas reais do banco de dados
-- [ ] Implementar configurações do site editáveis (preços, textos)
-- [ ] Conectar componentes admin ao backend tRPC
-- [ ] Testar todas as funcionalidades admin
+## Painel Admin Funcional (CONCLUÍDO)
+- [x] Analisar schema atual do banco de dados
+- [x] Analisar componentes admin existentes
+- [x] Criar procedures tRPC admin protegidas (adminProcedure)
+- [x] Implementar gerenciamento de usuários (listar, banir/desbanir, alterar role, ver detalhes)
+- [x] Implementar gerenciamento de jogos/leituras (listar, ver detalhes, filtrar por data)
+- [x] Implementar gerenciamento de consultas (listar, aprovar/recusar, ver detalhes)
+- [x] Implementar gerenciamento de pagamentos (listar transações reais do Stripe)
+- [x] Implementar estatísticas reais do banco de dados
+- [x] Implementar configurações do site editáveis (preços, textos)
+- [x] Conectar componentes admin ao backend tRPC
+- [x] Testar todas as funcionalidades admin
 - [ ] Fazer push para GitHub/Vercel
+
+## Painel Admin Completo (CONCLUÍDO)
+
+### Dashboard Principal
+- [x] Estatísticas em tempo real (usuários, receita, jogos, consultas)
+- [ ] Gráficos de receita mensal e crescimento (futuro)
+- [x] Atividade recente (via logs de atividade)
+- [x] Alertas e notificações do sistema (via toast)
+
+### Gerenciamento de Usuários
+- [x] Listagem paginada com busca e filtros
+- [x] Ver detalhes completos do usuário (perfil, compras, leituras)
+- [x] Banir/desbanir usuários
+- [x] Alterar role (user/admin)
+- [x] Ver histórico de atividades do usuário
+- [ ] Exportar lista de usuários (futuro)
+
+### Gerenciamento de Produtos
+- [x] CRUD completo de produtos (criar, editar, excluir)
+- [x] Editar preços e descrições
+- [x] Ativar/desativar produtos
+- [x] Gerenciar categorias
+- [ ] Upload de imagens de produtos (futuro)
+- [x] Gerenciar produtos em destaque
+
+### Gerenciamento de Taromantes
+- [x] Listar todos os taromantes
+- [x] Aprovar/rejeitar novos taromantes
+- [x] Editar perfil e especialidades
+- [x] Gerenciar preços por hora e sessão
+- [x] Ativar/desativar taromantes
+
+### Pagamentos e Pedidos
+- [x] Listar todas as transações
+- [x] Ver detalhes de cada pagamento
+- [x] Processar reembolsos via Stripe
+- [x] Filtrar por status, data, valor
+- [ ] Relatório de receita por período (futuro)
+- [ ] Exportar relatórios financeiros (futuro)
+
+### Integrações e Webhooks
+- [x] Painel de status das integrações (Auth0, Stripe, LLM, Database)
+- [x] Configurar webhooks personalizados (CRUD)
+- [x] Logs de webhooks recebidos
+- [x] Gerenciar chaves de API (criar, revogar)
+- [x] Status de saúde dos serviços
+
+### Configurações do Site
+- [x] Editar textos e mensagens do site
+- [x] Configurar preços padrão
+- [x] Nova configuração por categoria (geral, preços, conteúdo, integrações)
+- [ ] Gerenciar promoções e cupons (futuro)
+- [ ] Modo manutenção (futuro)
+
+### Logs de Atividade
+- [x] Log de ações administrativas
+- [x] Filtros por tipo, data, usuário
+- [x] Exibição de detalhes por log

@@ -50,6 +50,13 @@
       "when": 1770689376698,
       "tag": "0006_absent_sentinel",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1770716347258,
+      "tag": "0007_mighty_lizard",
+      "breakpoints": true
     }
   ]
 }
