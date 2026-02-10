@@ -3,6 +3,33 @@
   "outputDirectory": "dist/public",
   "framework": "vite",
   "public": true,
+  "functions": {
+    "api/index.ts": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/trpc/:path*",
+      "destination": "/api"
+    },
+    {
+      "source": "/api/stripe/webhook",
+      "destination": "/api"
+    },
+    {
+      "source": "/api/callback",
+      "destination": "/api"
+    },
+    {
+      "source": "/api/logout",
+      "destination": "/api"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "/api"
+    }
+  ],
   "routes": [
     {
       "handle": "filesystem"
