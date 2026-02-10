@@ -17,7 +17,7 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
 
   useEffect(() => {
-    if (!loading && (!user || user.role !== "admin")) {
+    if (!loading && (!user || user.email !== 'milton.contato177@gmail.com')) {
       setLocation("/");
     }
   }, [user, loading, setLocation]);
@@ -30,7 +30,7 @@ export default function AdminDashboard() {
     );
   }
 
-  if (!user || user.role !== "admin") {
+  if (!user || user.email !== 'milton.contato177@gmail.com') {
     return null;
   }
 

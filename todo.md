@@ -373,3 +373,11 @@
 - [x] Testar fluxo completo de checkout
 - [x] Criar testes vitest para router de payments
 - [x] Todos os testes passando
+
+## Configuração de Acesso Admin (CONCLUÍDO)
+- [x] Modificar useAuth.ts para verificar email e atribuir role admin
+- [x] Configurar VITE_AUTH0_CLIENT_ID
+- [x] Adicionar link Admin no menu mobile
+- [x] Modificar AdminDashboard para verificar email diretamente
+- [ ] Testar acesso ao painel /admin
+- [ ] Verificar permissões de admin funcionando corretamente

@@ -25,9 +25,20 @@ export function useAuth(options?: UseAuthOptions) {
     email: auth0User.email || '',
     name: auth0User.name || '',
     picture: auth0User.picture || '',
-    role: (auth0User['https://chavedooraculo.com/role'] as 'admin' | 'user') || 'user',
+    // Check role from custom claim or assign admin to specific email
+    role: (
+      (auth0User['https://chavedooraculo.com/role'] as 'admin' | 'user') ||
+      (auth0User.email === 'milton.contato177@gmail.com' ? 'admin' : 'user')
+    ) as 'admin' | 'user',
     createdAt: auth0User.updated_at || new Date().toISOString(),
   } : null;
+
+  // Debug: log user info
+  useEffect(() => {
+    if (user) {
+      console.log('[useAuth] User info:', { email: user.email, role: user.role });
+    }
+  }, [user]);
 
   const logout = async () => {
     auth0Logout({

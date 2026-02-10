@@ -237,6 +237,16 @@ export default function Header() {
                       <User className="w-5 h-5" />
                       Meu Perfil
                     </Link>
+                    {user.email === 'milton.contato177@gmail.com' && (
+                      <Link
+                        href="/admin"
+                        className="flex items-center gap-3 px-4 py-3 text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 rounded-lg transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <Star className="w-5 h-5" />
+                        Admin
+                      </Link>
+                    )}
                     <button
                       className="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                       onClick={() => {
