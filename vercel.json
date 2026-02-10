@@ -3,6 +3,16 @@
   "outputDirectory": "dist/public",
   "framework": "vite",
   "public": true,
+  "rewrites": [
+    {
+      "source": "/callback",
+      "destination": "/api/callback"
+    },
+    {
+      "source": "/logout",
+      "destination": "/api/logout"
+    }
+  ],
   "routes": [
     {
       "handle": "filesystem"
