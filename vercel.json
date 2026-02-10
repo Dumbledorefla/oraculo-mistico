@@ -10,33 +10,12 @@
   },
   "rewrites": [
     {
-      "source": "/api/trpc/:path*",
-      "destination": "/api"
-    },
-    {
-      "source": "/api/stripe/webhook",
-      "destination": "/api"
-    },
-    {
-      "source": "/api/callback",
-      "destination": "/api"
-    },
-    {
-      "source": "/api/logout",
-      "destination": "/api"
-    },
-    {
       "source": "/api/:path*",
       "destination": "/api"
-    }
-  ],
-  "routes": [
-    {
-      "handle": "filesystem"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/:path*",
+      "destination": "/index.html"
     }
   ]
 }
