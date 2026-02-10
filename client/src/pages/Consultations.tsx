@@ -41,7 +41,7 @@ const SPECIALTY_LABELS: Record<string, string> = {
 const SPECIALTY_COLORS: Record<string, string> = {
   tarot: "bg-purple-500/20 text-purple-300 border-purple-500/30",
   numerologia: "bg-blue-500/20 text-blue-300 border-blue-500/30",
-  astrologia: "bg-amber-500/20 text-amber-300 border-amber-500/30",
+  astrologia: "bg-purple-500/20 text-purple-300 border-purple-500/30",
   videncia: "bg-pink-500/20 text-pink-300 border-pink-500/30",
   runas: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
   amor: "bg-rose-500/20 text-rose-300 border-rose-500/30",
@@ -76,23 +76,23 @@ export default function Consultations() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/">
-              <a className="flex items-center gap-2 text-amber-400 font-serif text-xl">
+              <a className="flex items-center gap-2 text-purple-400 font-serif text-xl">
                 <Sparkles className="w-6 h-6" />
                 Oráculo Místico
               </a>
             </Link>
             <nav className="hidden md:flex items-center gap-6">
               <Link href="/mapas-jogos">
-                <a className="text-gray-300 hover:text-amber-400 transition-colors">Mapas e Jogos</a>
+                <a className="text-gray-300 hover:text-purple-400 transition-colors">Mapas e Jogos</a>
               </Link>
               <Link href="/consultas">
-                <a className="text-amber-400 font-medium">Consultas</a>
+                <a className="text-purple-400 font-medium">Consultas</a>
               </Link>
               <Link href="/numerologia">
-                <a className="text-gray-300 hover:text-amber-400 transition-colors">Numerologia</a>
+                <a className="text-gray-300 hover:text-purple-400 transition-colors">Numerologia</a>
               </Link>
               <Link href="/horoscopo">
-                <a className="text-gray-300 hover:text-amber-400 transition-colors">Horóscopo</a>
+                <a className="text-gray-300 hover:text-purple-400 transition-colors">Horóscopo</a>
               </Link>
             </nav>
           </div>
@@ -101,7 +101,7 @@ export default function Consultations() {
 
       {/* Hero Section */}
       <section className="py-16 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 via-transparent to-amber-900/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 via-transparent to-purple-900/20" />
         <div className="container mx-auto px-4 relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -109,7 +109,7 @@ export default function Consultations() {
             className="text-center max-w-3xl mx-auto"
           >
             <h1 className="text-4xl md:text-5xl font-serif text-white mb-4">
-              Consulte com <span className="text-amber-400">Especialistas</span>
+              Consulte com <span className="text-purple-400">Especialistas</span>
             </h1>
             <p className="text-gray-400 text-lg mb-8">
               Conecte-se com taromantes, numerólogos e astrólogos experientes para 
@@ -141,7 +141,7 @@ export default function Consultations() {
               variant={selectedSpecialty === null ? "default" : "outline"}
               size="sm"
               onClick={() => setSelectedSpecialty(null)}
-              className={selectedSpecialty === null ? "bg-amber-500 hover:bg-amber-600" : ""}
+              className={selectedSpecialty === null ? "bg-purple-500 hover:bg-purple-600" : ""}
             >
               Todos
             </Button>
@@ -151,7 +151,7 @@ export default function Consultations() {
                 variant={selectedSpecialty === specialty ? "default" : "outline"}
                 size="sm"
                 onClick={() => setSelectedSpecialty(specialty)}
-                className={selectedSpecialty === specialty ? "bg-amber-500 hover:bg-amber-600" : ""}
+                className={selectedSpecialty === specialty ? "bg-purple-500 hover:bg-purple-600" : ""}
               >
                 {SPECIALTY_LABELS[specialty] || specialty}
               </Button>
@@ -192,7 +192,7 @@ export default function Consultations() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Card className="bg-gray-900/50 border-purple-500/20 hover:border-amber-500/40 transition-all group overflow-hidden">
+                  <Card className="bg-gray-900/50 border-purple-500/20 hover:border-purple-500/40 transition-all group overflow-hidden">
                     <CardContent className="p-6">
                       {/* Header */}
                       <div className="flex items-start gap-4 mb-4">
@@ -203,17 +203,17 @@ export default function Consultations() {
                             className="w-20 h-20 rounded-full object-cover border-2 border-purple-500/30"
                           />
                           {taromante.isFeatured && (
-                            <div className="absolute -top-1 -right-1 bg-amber-500 rounded-full p-1">
+                            <div className="absolute -top-1 -right-1 bg-purple-500 rounded-full p-1">
                               <Star className="w-3 h-3 text-white" fill="white" />
                             </div>
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3 className="text-lg font-serif text-white truncate">{taromante.name}</h3>
-                          <p className="text-amber-400 text-sm truncate">{taromante.title}</p>
+                          <p className="text-purple-400 text-sm truncate">{taromante.title}</p>
                           <div className="flex items-center gap-2 mt-1">
                             <div className="flex items-center gap-1">
-                              <Star className="w-4 h-4 text-amber-400" fill="currentColor" />
+                              <Star className="w-4 h-4 text-purple-400" fill="currentColor" />
                               <span className="text-white text-sm">{taromante.rating}</span>
                             </div>
                             <span className="text-gray-500 text-sm">
@@ -258,12 +258,12 @@ export default function Consultations() {
                       <div className="flex items-center justify-between pt-4 border-t border-purple-500/20">
                         <div>
                           <p className="text-gray-500 text-xs">A partir de</p>
-                          <p className="text-amber-400 font-bold text-lg">
+                          <p className="text-purple-400 font-bold text-lg">
                             R$ {parseFloat(taromante.pricePerSession || "0").toFixed(2).replace(".", ",")}
                           </p>
                         </div>
                         <Link href={`/taromante/${taromante.slug}`}>
-                          <Button className="bg-gradient-to-r from-purple-600 to-amber-600 hover:from-purple-700 hover:to-amber-700">
+                          <Button className="bg-gradient-to-r from-purple-600 to-purple-600 hover:from-purple-700 hover:to-purple-700">
                             Ver Perfil
                             <ArrowRight className="w-4 h-4 ml-2" />
                           </Button>
@@ -279,16 +279,16 @@ export default function Consultations() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-purple-900/30 to-amber-900/30">
+      <section className="py-16 bg-gradient-to-r from-purple-900/30 to-purple-900/30">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-serif text-white mb-4">
-            Quer se tornar um <span className="text-amber-400">Taromante</span>?
+            Quer se tornar um <span className="text-purple-400">Taromante</span>?
           </h2>
           <p className="text-gray-400 mb-6 max-w-xl mx-auto">
             Compartilhe seu dom e ajude pessoas a encontrar seu caminho. 
             Cadastre-se como especialista e comece a atender.
           </p>
-          <Button variant="outline" className="border-amber-500 text-amber-400 hover:bg-amber-500/10">
+          <Button variant="outline" className="border-purple-500 text-purple-400 hover:bg-purple-500/10">
             Saiba Mais
           </Button>
         </div>

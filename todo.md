@@ -273,12 +273,17 @@
 - [x] Atualizar App.tsx (botão de consulta)
 - [x] Atualizar AdminPanel.tsx (todos os botões e cores)
 
-### 1.2. Identidade Visual - Páginas Secundárias (PRÓXIMO)
-- [ ] Atualizar Consultations.tsx (remover todas as referências amber)
-- [ ] Atualizar AdminConsultations.tsx (status pendente)
-- [ ] Atualizar AdminGames.tsx (badges)
-- [ ] Atualizar AdminPayments.tsx (status pendente)
-- [ ] Atualizar AdminStats.tsx (ícones de estrela)
+### 1.2. Identidade Visual - Páginas Secundárias (PARCIALMENTE CONCLUÍDO)
+- [x] Atualizar Consultations.tsx (remover todas as referências amber)
+- [x] Atualizar TarotGame.tsx (43 substituições amber/yellow → purple)
+- [x] Atualizar TaromantePanel.tsx (18 substituições amber/yellow → purple)
+- [ ] Atualizar TaromanteProfile.tsx (14 referências amber restantes)
+- [ ] Atualizar Courses.tsx (11 referências amber restantes)
+- [ ] Atualizar CourseDetail.tsx (9 referências amber restantes)
+- [ ] Atualizar Home.tsx (6 referências amber/yellow restantes)
+- [ ] Atualizar UpsellBlock.tsx (3 referências amber)
+- [ ] Atualizar StarRating.tsx (2 referências yellow)
+- [ ] Atualizar componentes admin (AdminConsultations, AdminGames, AdminPayments, AdminStats)
 - [ ] Revisar todas as páginas para garantir consistência visual
 
 ### 2. Coleta de Dados do Usuário (CONCLUÍDO)
@@ -298,19 +303,19 @@
 - [x] Adicionar UpsellBlock ao final do Horóscopo → link para Mapa Astral
 - [x] Revisar textos (tom acolhedor: "Essa leitura gratuita oferece uma visão inicial...")
 
-### 4. Ajuste da Home (IMPLEMENTAR)
-- [ ] Reduzir altura do hero de 100vh para ~70vh
-- [ ] Criar seção MethodsGrid logo abaixo do hero
-- [ ] Adicionar 4-6 cards de métodos visíveis sem scroll
-- [ ] Cards devem incluir: Tarot, Mapa Astral, Numerologia, Consultas
-- [ ] Diferenciar visualmente métodos gratuitos vs pagos (borda, badge, etc)
+### 4. Ajuste da Home (CONCLUÍDO)
+- [x] Reduzir altura do hero de 100vh para ~70vh
+- [x] Criar seção MethodsGrid logo abaixo do hero
+- [x] Adicionar 4-6 cards de métodos visíveis sem scroll
+- [x] Cards devem incluir: Tarot, Mapa Astral, Numerologia, Consultas
+- [x] Diferenciar visualmente métodos gratuitos vs pagos (borda dourada, ícone Sparkles)
 
-### 5. Tom de Comunicação (IMPLEMENTAR)
-- [ ] Revisar CheckoutSuccess.tsx (mensagens mais humanas)
-- [ ] Revisar mensagens de sucesso em consultas
-- [ ] Revisar mensagens de erro (tornar acolhedoras)
-- [ ] Revisar textos de loading/processamento
-- [ ] Buscar e substituir textos genéricos por mensagens acolhedoras
+### 5. Tom de Comunicação (CONCLUÍDO)
+- [x] Revisar CheckoutSuccess.tsx (mensagens mais humanas)
+- [x] Revisar mensagens de sucesso em consultas
+- [x] Revisar mensagens de erro (tornar acolhedoras)
+- [x] Revisar textos de loading/processamento
+- [x] Buscar e substituir textos genéricos por mensagens acolhedoras
 
 
 ---

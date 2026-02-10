@@ -169,7 +169,7 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
         {[...Array(50)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-yellow-300 rounded-full"
+            className="absolute w-1 h-1 bg-purple-300 rounded-full"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -182,18 +182,18 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
 
       <div className="relative z-10">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-yellow-500/20">
+        <div className="flex items-center justify-between p-6 border-b border-purple-500/20">
           <Link href="/">
-            <Button variant="ghost" size="sm" className="text-yellow-400 hover:text-yellow-300">
+            <Button variant="ghost" size="sm" className="text-purple-400 hover:text-purple-300">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Voltar
             </Button>
           </Link>
-          <h1 className="text-2xl font-bold text-yellow-400">{gameTitle}</h1>
+          <h1 className="text-2xl font-bold text-purple-400">{gameTitle}</h1>
           <Button 
             variant="ghost" 
             size="sm" 
-            className="text-yellow-400 hover:text-yellow-300"
+            className="text-purple-400 hover:text-purple-300"
             onClick={() => setPhase(phase === "history" ? "intro" : "history")}
           >
             <History className="w-4 h-4 mr-2" />
@@ -238,15 +238,15 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                 exit={{ opacity: 0, y: -20 }}
                 className="max-w-md mx-auto"
               >
-                <Card className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 border-yellow-500/30">
+                <Card className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 border-purple-500/30">
                   <CardContent className="p-8 space-y-6">
                     <div className="text-center">
-                      <Sparkles className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
+                      <Sparkles className="w-12 h-12 text-purple-400 mx-auto mb-4" />
                       <h2 className="text-2xl font-bold text-white mb-2">{gameTitle}</h2>
                       <p className="text-gray-300">{spread?.description}</p>
                       {isPremium && (
-                        <div className="mt-3 inline-block px-3 py-1 bg-yellow-500/20 border border-yellow-500/50 rounded-full">
-                          <span className="text-yellow-400 text-sm font-semibold">✨ Premium</span>
+                        <div className="mt-3 inline-block px-3 py-1 bg-purple-500/20 border border-purple-500/50 rounded-full">
+                          <span className="text-purple-400 text-sm font-semibold">✨ Premium</span>
                         </div>
                       )}
                     </div>
@@ -260,7 +260,7 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                           value={userName}
                           onChange={(e) => setUserName(e.target.value)}
                           placeholder="Digite seu nome..."
-                          className="bg-purple-900/50 border-yellow-500/30 text-white placeholder:text-gray-500"
+                          className="bg-purple-900/50 border-purple-500/30 text-white placeholder:text-gray-500"
                           onKeyPress={(e) => e.key === "Enter" && handleStartGame()}
                         />
                       </div>
@@ -274,7 +274,7 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                             type="date"
                             value={birthDate}
                             onChange={(e) => setBirthDate(e.target.value)}
-                            className="bg-purple-900/50 border-yellow-500/30 text-white placeholder:text-gray-500"
+                            className="bg-purple-900/50 border-purple-500/30 text-white placeholder:text-gray-500"
                           />
                         </div>
                       )}
@@ -288,14 +288,14 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                             value={question}
                             onChange={(e) => setQuestion(e.target.value)}
                             placeholder="O que você gostaria de saber?"
-                            className="bg-purple-900/50 border-yellow-500/30 text-white placeholder:text-gray-500"
+                            className="bg-purple-900/50 border-purple-500/30 text-white placeholder:text-gray-500"
                           />
                         </div>
                       )}
 
                       <Button
                         onClick={handleStartGame}
-                        className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2"
+                        className="w-full bg-purple-500 hover:bg-purple-600 text-black font-bold py-2"
                       >
                         Começar <ChevronRight className="w-4 h-4 ml-2" />
                       </Button>
@@ -319,7 +319,7 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                   transition={{ duration: 3, repeat: Infinity }}
                   className="mb-8"
                 >
-                  <Star className="w-16 h-16 text-yellow-400 mx-auto" />
+                  <Star className="w-16 h-16 text-purple-400 mx-auto" />
                 </motion.div>
                 <h2 className="text-3xl font-bold text-white mb-4">Concentre-se</h2>
                 <p className="text-gray-300 mb-8">
@@ -327,7 +327,7 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                 </p>
                 <Button
                   onClick={handleMentalize}
-                  className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-8 py-3"
+                  className="bg-purple-500 hover:bg-purple-600 text-black font-bold px-8 py-3"
                 >
                   Continuar <ChevronRight className="w-4 h-4 ml-2" />
                 </Button>
@@ -348,7 +348,7 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                   transition={{ duration: 2, repeat: isShuffling ? Infinity : 0 }}
                   className="mb-8"
                 >
-                  <div className="w-24 h-32 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg mx-auto flex items-center justify-center shadow-lg shadow-yellow-500/50">
+                  <div className="w-24 h-32 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg mx-auto flex items-center justify-center shadow-lg shadow-purple-500/50">
                     <Sparkles className="w-12 h-12 text-white" />
                   </div>
                 </motion.div>
@@ -359,7 +359,7 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                 <Button
                   onClick={handleShuffle}
                   disabled={isShuffling}
-                  className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-8 py-3 disabled:opacity-50"
+                  className="bg-purple-500 hover:bg-purple-600 text-black font-bold px-8 py-3 disabled:opacity-50"
                 >
                   {isShuffling ? "Embaralhando..." : "Embaralhar"} <RotateCcw className="w-4 h-4 ml-2" />
                 </Button>
@@ -419,7 +419,7 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                 exit={{ opacity: 0 }}
               >
                 <div className="text-center mb-8">
-                  <h2 className="text-3xl font-bold text-yellow-400 mb-2">Seu Resultado</h2>
+                  <h2 className="text-3xl font-bold text-purple-400 mb-2">Seu Resultado</h2>
                   <p className="text-gray-300">Bem-vindo, {userName}! Aqui está sua mensagem do universo.</p>
                 </div>
 
@@ -431,16 +431,16 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                       animate={{ opacity: 1, rotateY: 0 }}
                       transition={{ delay: index * 0.3 }}
                     >
-                      <Card className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 border-yellow-500/30 overflow-hidden">
+                      <Card className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 border-purple-500/30 overflow-hidden">
                         <CardContent className="p-6">
                           <div className="text-center mb-4">
-                            <h3 className="text-xl font-bold text-yellow-400">{card.name}</h3>
+                            <h3 className="text-xl font-bold text-purple-400">{card.name}</h3>
                             {spread?.positions[index] && (
                               <p className="text-sm text-gray-400">{spread.positions[index].name}</p>
                             )}
                           </div>
                           <div className="bg-purple-900/50 rounded-lg p-4 mb-4 h-32 flex items-center justify-center">
-                            <Sparkles className="w-12 h-12 text-yellow-400" />
+                            <Sparkles className="w-12 h-12 text-purple-400" />
                           </div>
                           <div className="space-y-3 text-sm">
                             <div>
@@ -453,7 +453,7 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                             </div>
                             <div>
                               <p className="text-gray-400 text-xs">Conselho</p>
-                              <p className="text-yellow-300">{card.advice}</p>
+                              <p className="text-purple-300">{card.advice}</p>
                             </div>
                           </div>
                         </CardContent>
@@ -484,13 +484,13 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                 <div className="flex gap-4 justify-center">
                   <Button
                     onClick={handleReset}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-8 py-2"
+                    className="bg-purple-500 hover:bg-purple-600 text-black font-bold px-8 py-2"
                   >
                     <RotateCcw className="w-4 h-4 mr-2" />
                     Nova Leitura
                   </Button>
                   <Link href="/">
-                    <Button variant="outline" className="border-yellow-500/30 text-yellow-400 hover:text-yellow-300">
+                    <Button variant="outline" className="border-purple-500/30 text-purple-400 hover:text-purple-300">
                       <ArrowLeft className="w-4 h-4 mr-2" />
                       Voltar
                     </Button>
@@ -508,9 +508,9 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                 exit={{ opacity: 0 }}
                 className="max-w-4xl mx-auto"
               >
-                <h2 className="text-2xl font-bold text-yellow-400 mb-6">Histórico de Leituras</h2>
+                <h2 className="text-2xl font-bold text-purple-400 mb-6">Histórico de Leituras</h2>
                 {history.length === 0 ? (
-                  <Card className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 border-yellow-500/30">
+                  <Card className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 border-purple-500/30">
                     <CardContent className="p-8 text-center">
                       <p className="text-gray-300">Você ainda não fez nenhuma leitura.</p>
                     </CardContent>
@@ -518,11 +518,11 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                 ) : (
                   <div className="space-y-4">
                     {history.map((reading) => (
-                      <Card key={reading.id} className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 border-yellow-500/30">
+                      <Card key={reading.id} className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 border-purple-500/30">
                         <CardContent className="p-6">
                           <div className="flex justify-between items-start mb-3">
                             <div>
-                              <h3 className="text-lg font-bold text-yellow-400">{reading.spreadName}</h3>
+                              <h3 className="text-lg font-bold text-purple-400">{reading.spreadName}</h3>
                               <p className="text-sm text-gray-400">{reading.date}</p>
                             </div>
                             <Button
@@ -536,11 +536,11 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                           </div>
                           <div>
                             <p className="text-sm text-gray-300">
-                              <span className="text-yellow-400 font-semibold">Cartas:</span> {reading.cardNames.join(", ")}
+                              <span className="text-purple-400 font-semibold">Cartas:</span> {reading.cardNames.join(", ")}
                             </p>
                             {reading.question && (
                               <p className="text-sm text-gray-300 mt-2">
-                                <span className="text-yellow-400 font-semibold">Pergunta:</span> {reading.question}
+                                <span className="text-purple-400 font-semibold">Pergunta:</span> {reading.question}
                               </p>
                             )}
                           </div>
@@ -551,7 +551,7 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                 )}
                 <Button
                   onClick={() => setPhase("intro")}
-                  className="mt-6 bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-8 py-2"
+                  className="mt-6 bg-purple-500 hover:bg-purple-600 text-black font-bold px-8 py-2"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Voltar

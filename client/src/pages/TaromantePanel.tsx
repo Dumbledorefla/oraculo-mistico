@@ -51,7 +51,7 @@ const CONSULTATION_TYPE_ICONS: Record<string, typeof Video> = {
 };
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+  pending: "bg-purple-500/20 text-purple-400 border-purple-500/30",
   confirmed: "bg-blue-500/20 text-blue-400 border-blue-500/30",
   completed: "bg-green-500/20 text-green-400 border-green-500/30",
   cancelled: "bg-red-500/20 text-red-400 border-red-500/30",
@@ -97,7 +97,7 @@ export default function TaromantePanel() {
   if (loading || loadingTaromante) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950/20 to-gray-950 flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -119,7 +119,7 @@ export default function TaromantePanel() {
                   Voltar
                 </a>
               </Link>
-              <a className="flex items-center gap-2 text-amber-400 font-serif text-xl">
+              <a className="flex items-center gap-2 text-purple-400 font-serif text-xl">
                 <Sparkles className="w-6 h-6" />
                 Oráculo Místico
               </a>
@@ -136,7 +136,7 @@ export default function TaromantePanel() {
               Esta área é exclusiva para taromantes cadastrados. Se você deseja se tornar um especialista em nossa plataforma, entre em contato conosco.
             </p>
             <Link href="/consultas">
-              <Button className="bg-gradient-to-r from-purple-600 to-amber-600">
+              <Button className="bg-gradient-to-r from-purple-600 to-purple-600">
                 Ver Taromantes Disponíveis
               </Button>
             </Link>
@@ -171,7 +171,7 @@ export default function TaromantePanel() {
               </a>
             </Link>
             <Link href="/">
-              <a className="flex items-center gap-2 text-amber-400 font-serif text-xl">
+              <a className="flex items-center gap-2 text-purple-400 font-serif text-xl">
                 <Sparkles className="w-6 h-6" />
                 Oráculo Místico
               </a>
@@ -207,8 +207,8 @@ export default function TaromantePanel() {
                   <p className="text-gray-400 text-sm">Consultas Pendentes</p>
                   <p className="text-3xl font-bold text-white">{pendingConsultations.length}</p>
                 </div>
-                <div className="w-12 h-12 bg-yellow-500/20 rounded-full flex items-center justify-center">
-                  <Clock className="w-6 h-6 text-yellow-400" />
+                <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center">
+                  <Clock className="w-6 h-6 text-purple-400" />
                 </div>
               </div>
             </CardContent>
@@ -233,12 +233,12 @@ export default function TaromantePanel() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-400 text-sm">Ganhos do Mês</p>
-                  <p className="text-3xl font-bold text-amber-400">
+                  <p className="text-3xl font-bold text-purple-400">
                     R$ {thisMonthEarnings.toFixed(2).replace(".", ",")}
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-amber-500/20 rounded-full flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-amber-400" />
+                <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center">
+                  <TrendingUp className="w-6 h-6 text-purple-400" />
                 </div>
               </div>
             </CardContent>
@@ -251,7 +251,7 @@ export default function TaromantePanel() {
                   <p className="text-gray-400 text-sm">Avaliação</p>
                   <div className="flex items-center gap-2">
                     <p className="text-3xl font-bold text-white">{taromante.rating}</p>
-                    <Star className="w-6 h-6 text-amber-400" fill="currentColor" />
+                    <Star className="w-6 h-6 text-purple-400" fill="currentColor" />
                   </div>
                 </div>
                 <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center">
@@ -279,7 +279,7 @@ export default function TaromantePanel() {
               <Card className="bg-gray-900/50 border-purple-500/20">
                 <CardHeader>
                   <CardTitle className="text-white font-serif flex items-center gap-2">
-                    <Calendar className="w-5 h-5 text-amber-400" />
+                    <Calendar className="w-5 h-5 text-purple-400" />
                     Próximas Consultas
                   </CardTitle>
                 </CardHeader>
@@ -332,7 +332,7 @@ export default function TaromantePanel() {
               <Card className="bg-gray-900/50 border-purple-500/20">
                 <CardHeader>
                   <CardTitle className="text-white font-serif flex items-center gap-2">
-                    <DollarSign className="w-5 h-5 text-amber-400" />
+                    <DollarSign className="w-5 h-5 text-purple-400" />
                     Resumo Financeiro
                   </CardTitle>
                 </CardHeader>
@@ -340,7 +340,7 @@ export default function TaromantePanel() {
                   <div className="space-y-4">
                     <div className="flex justify-between items-center p-3 bg-gray-800/50 rounded-lg">
                       <span className="text-gray-400">Total de Ganhos</span>
-                      <span className="text-xl font-bold text-amber-400">
+                      <span className="text-xl font-bold text-purple-400">
                         R$ {totalEarnings.toFixed(2).replace(".", ",")}
                       </span>
                     </div>
@@ -406,7 +406,7 @@ export default function TaromantePanel() {
                             </div>
                           </div>
                           <div className="flex items-center gap-4">
-                            <span className="text-amber-400 font-bold">
+                            <span className="text-purple-400 font-bold">
                               R$ {parseFloat(consultation.price || "0").toFixed(2).replace(".", ",")}
                             </span>
                             <Badge className={STATUS_COLORS[consultation.status]}>
@@ -497,7 +497,7 @@ export default function TaromantePanel() {
                           <p className="text-gray-500 text-sm mt-1">{service.duration} minutos</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-2xl font-bold text-amber-400">
+                          <p className="text-2xl font-bold text-purple-400">
                             R$ {parseFloat(service.price || "0").toFixed(2).replace(".", ",")}
                           </p>
                           <Badge
