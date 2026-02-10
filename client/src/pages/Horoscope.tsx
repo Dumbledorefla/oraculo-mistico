@@ -25,6 +25,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { zodiacSigns, ZodiacSign, getDailyMessage } from "@/data/horoscope";
 import { toast } from "sonner";
 import UserDataForm, { UserData } from "@/components/UserDataForm";
+import { UpsellBlock } from "@/components/UpsellBlock";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 
@@ -324,6 +325,23 @@ export default function Horoscope() {
                   </p>
                 </CardContent>
               </Card>
+
+              {/* Upsell Block - Horóscopo Gratuito */}
+              <div className="mb-8">
+                <UpsellBlock
+                  title="Descubra seu Mapa Astral Completo"
+                  description="Esse horóscopo diário oferece uma visão geral do seu signo. Para uma análise astrológica completa com seu ascendente, lua, posições planetárias e previsões personalizadas, desbloqueie seu Mapa Astral."
+                  features={[
+                    "Mapa Astral personalizado com ascendente e lua",
+                    "Análise de trânsitos planetários atuais",
+                    "Previsões semanais e mensais detalhadas",
+                    "Compatibilidade astrológica aprofundada",
+                  ]}
+                  ctaText="Gerar Mapa Astral"
+                  ctaLink="/mapa-astral"
+                  price="R$ 49,90"
+                />
+              </div>
 
               {/* Actions */}
               <div className="flex gap-4">

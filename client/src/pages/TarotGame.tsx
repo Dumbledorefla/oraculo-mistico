@@ -26,6 +26,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { toast } from "sonner";
 import TarotPaywall from "@/components/TarotPaywall";
 import UserDataForm, { UserData } from "@/components/UserDataForm";
+import { UpsellBlock } from "@/components/UpsellBlock";
 import { trpc } from "@/lib/trpc";
 
 type GamePhase = "paywall" | "userData" | "intro" | "spread-select" | "mentalize" | "shuffle" | "select" | "result" | "history";
@@ -460,6 +461,25 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
                     </motion.div>
                   ))}
                 </div>
+
+                {/* Upsell Block - Apenas para Tarot do Dia (método gratuito) */}
+                {gameType === "dia" && (
+                  <div className="mb-8">
+                    <UpsellBlock
+                      title="Quer uma leitura mais profunda?"
+                      description="Essa leitura gratuita oferece uma visão inicial do seu dia. Para uma análise completa sobre amor, carreira e vida pessoal, experimente nosso Tarot Completo com 6 cartas."
+                      features={[
+                        "Tiragem com 6 cartas do Tarot Maior",
+                        "Análise profunda de passado, presente e futuro",
+                        "Orientações personalizadas para sua jornada",
+                        "Interpretação detalhada de cada posição",
+                      ]}
+                      ctaText="Fazer Tarot Completo"
+                      ctaLink="/tarot/completo"
+                      price="R$ 29,90"
+                    />
+                  </div>
+                )}
 
                 <div className="flex gap-4 justify-center">
                   <Button

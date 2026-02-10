@@ -27,6 +27,7 @@ import {
 } from "@/data/numerology";
 import { toast } from "sonner";
 import UserDataForm, { UserData } from "@/components/UserDataForm";
+import { UpsellBlock } from "@/components/UpsellBlock";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 
@@ -342,6 +343,23 @@ export default function Numerology() {
                   })()}
                 </motion.div>
               </AnimatePresence>
+
+              {/* Upsell Block - Numerologia Gratuita */}
+              <div className="mt-8 mb-8">
+                <UpsellBlock
+                  title="Desbloqueie seu Mapa Numerológico Completo"
+                  description="Essa análise gratuita oferece uma visão inicial dos seus números pessoais. Para uma interpretação completa com compatibilidades, desafios e orientações personalizadas, desbloqueie o Mapa Completo."
+                  features={[
+                    "Análise detalhada de compatibilidades amorosas e profissionais",
+                    "Identificação de desafios e lições de vida",
+                    "Orientações personalizadas para cada número",
+                    "Previsões para os próximos 12 meses",
+                  ]}
+                  ctaText="Desbloquear Mapa Completo"
+                  ctaLink="/numerologia/completa"
+                  price="R$ 39,90"
+                />
+              </div>
 
               {/* Actions */}
               <div className="flex gap-4 mt-8">

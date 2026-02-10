@@ -291,12 +291,12 @@
 - [x] Implementar pré-preenchimento para usuários logados
 - [x] Criar tRPC endpoint para salvar/atualizar dados do usuário
 
-### 3. Blocos de Upsell Freemium (IMPLEMENTAR)
-- [ ] Criar componente UpsellBlock.tsx reutilizável
-- [ ] Adicionar UpsellBlock ao final do Tarot do Dia → link para Tarot Completo
-- [ ] Adicionar UpsellBlock ao final da Numerologia → link para Numerologia Completa
-- [ ] Adicionar UpsellBlock ao final do Horóscopo → link para Mapa Astral
-- [ ] Revisar textos (tom acolhedor: "Essa leitura gratuita oferece uma visão inicial...")
+### 3. Blocos de Upsell Freemium (CONCLUÍDO)
+- [x] Criar componente UpsellBlock.tsx reutilizável
+- [x] Adicionar UpsellBlock ao final do Tarot do Dia → link para Tarot Completo
+- [x] Adicionar UpsellBlock ao final da Numerologia → link para Numerologia Completa
+- [x] Adicionar UpsellBlock ao final do Horóscopo → link para Mapa Astral
+- [x] Revisar textos (tom acolhedor: "Essa leitura gratuita oferece uma visão inicial...")
 
 ### 4. Ajuste da Home (IMPLEMENTAR)
 - [ ] Reduzir altura do hero de 100vh para ~70vh
