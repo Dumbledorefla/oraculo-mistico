@@ -32,7 +32,7 @@ export default function TarotPaywall({ gameName, onUnlock }: TarotPaywallProps) 
       animate={{ opacity: 1, y: 0 }}
       className="max-w-2xl mx-auto"
     >
-      <Card className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 border-yellow-500/30">
+      <Card className="bg-gradient-to-br from-purple-900/50 to-blue-900/50 border-purple-500/30">
         <CardContent className="p-8 space-y-6">
           <div className="text-center">
             <motion.div
@@ -40,12 +40,12 @@ export default function TarotPaywall({ gameName, onUnlock }: TarotPaywallProps) 
               transition={{ duration: 2, repeat: Infinity }}
               className="inline-block mb-4"
             >
-              <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto shadow-lg shadow-yellow-500/50">
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-violet-600 rounded-full flex items-center justify-center mx-auto shadow-lg shadow-purple-500/50">
                 <Lock className="w-10 h-10 text-white" />
               </div>
             </motion.div>
             
-            <h2 className="text-3xl font-bold text-yellow-400 mb-2">
+            <h2 className="text-3xl font-bold text-purple-300 mb-2">
               {gameName} Premium
             </h2>
             <p className="text-gray-300 text-lg">
@@ -85,7 +85,7 @@ export default function TarotPaywall({ gameName, onUnlock }: TarotPaywallProps) 
               <>
                 <Button
                   onClick={handleLogin}
-                  className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 text-lg"
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 text-lg"
                 >
                   <Sparkles className="w-5 h-5 mr-2" />
                   Fazer Login para Continuar
@@ -98,7 +98,7 @@ export default function TarotPaywall({ gameName, onUnlock }: TarotPaywallProps) 
               <>
                 <Button
                   onClick={handleUpgrade}
-                  className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 text-lg"
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 text-lg"
                 >
                   <Sparkles className="w-5 h-5 mr-2" />
                   Desbloquear por R$ 19,90
@@ -110,7 +110,7 @@ export default function TarotPaywall({ gameName, onUnlock }: TarotPaywallProps) 
             )}
           </div>
 
-          <div className="text-center pt-4 border-t border-yellow-500/20">
+          <div className="text-center pt-4 border-t border-purple-500/20">
             <p className="text-xs text-gray-500">
               ✨ Garantia de 7 dias • Suporte 24/7 • Pagamento seguro
             </p>

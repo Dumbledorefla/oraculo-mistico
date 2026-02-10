@@ -66,9 +66,9 @@ export function StarRating({
               className={cn(
                 sizeClasses[size],
                 isFilled
-                  ? "fill-amber-400 text-amber-400"
+                  ? "fill-yellow-600/80 text-yellow-600/80"
                   : isHalfFilled
-                  ? "fill-amber-400/50 text-amber-400"
+                  ? "fill-yellow-600/40 text-yellow-600/40"
                   : "fill-transparent text-gray-500"
               )}
             />
@@ -135,7 +135,7 @@ export function ReviewForm({ onSubmit, isLoading, title = "Deixe sua avaliação
         className={cn(
           "w-full py-3 rounded-lg font-medium transition-colors",
           rating > 0
-            ? "bg-amber-500 hover:bg-amber-600 text-white"
+            ? "bg-purple-600 hover:bg-purple-700 text-white"
             : "bg-gray-700 text-gray-500 cursor-not-allowed"
         )}
       >

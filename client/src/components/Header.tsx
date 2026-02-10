@@ -68,7 +68,7 @@ export default function Header() {
           <div className="w-8 h-8 rounded-lg bg-primary/30 flex items-center justify-center border border-primary/30">
             <Sparkles className="w-5 h-5 text-primary" />
           </div>
-          <span className="font-serif text-xl font-bold gold-text">Oráculo Místico</span>
+          <span className="font-serif text-xl font-bold text-primary">Oráculo Místico</span>
         </Link>
         
         {/* Desktop Navigation */}

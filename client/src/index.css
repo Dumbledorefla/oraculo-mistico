@@ -51,9 +51,9 @@
   /* Neo-Mysticism Dark Theme with Gold Accents */
   --radius: 0.75rem;
   
-  /* Gold/Amber Primary */
-  --primary: oklch(0.75 0.15 85);
-  --primary-foreground: oklch(0.15 0.02 85);
+  /* Purple/Violet Primary (OB1: roxo como cor principal) */
+  --primary: oklch(0.6 0.18 280);
+  --primary-foreground: oklch(0.98 0.01 280);
   
   /* Deep Purple Background */
   --background: oklch(0.12 0.03 280);
@@ -75,18 +75,18 @@
   --muted: oklch(0.25 0.03 280);
   --muted-foreground: oklch(0.65 0.02 280);
   
-  /* Accent - Purple highlight */
-  --accent: oklch(0.35 0.12 280);
-  --accent-foreground: oklch(0.95 0.01 280);
+  /* Accent - Gold/Amber subtle (OB1: dourado apenas como detalhe) */
+  --accent: oklch(0.75 0.12 85);
+  --accent-foreground: oklch(0.15 0.02 85);
   
   /* Destructive */
   --destructive: oklch(0.55 0.2 25);
   --destructive-foreground: oklch(0.98 0 0);
   
-  /* Border - Subtle gold tint */
+  /* Border - Purple with subtle gold ring (OB1: dourado em detalhes) */
   --border: oklch(0.3 0.05 280);
   --input: oklch(0.25 0.04 280);
-  --ring: oklch(0.7 0.12 85);
+  --ring: oklch(0.65 0.1 85);
   
   /* Charts - Gold to purple gradient */
   --chart-1: oklch(0.75 0.15 85);

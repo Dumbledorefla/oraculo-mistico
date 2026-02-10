@@ -52,7 +52,7 @@ function Router() {
               <p className="text-gray-400 mb-6">
                 Sua consulta foi agendada com sucesso. Você receberá um email com os detalhes e instruções para a sessão.
               </p>
-              <a href="/perfil" className="inline-block bg-amber-500 hover:bg-amber-600 text-white px-6 py-3 rounded-lg transition-colors">
+              <a href="/perfil" className="inline-block bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition-colors">
                 Ver Minhas Consultas
               </a>
             </div>

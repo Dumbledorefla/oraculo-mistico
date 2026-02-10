@@ -44,7 +44,7 @@ export default function AdminPanel() {
             Você precisa estar logado para acessar o painel administrativo.
           </p>
           <Link href="/">
-            <Button className="bg-amber-500 hover:bg-amber-600">
+            <Button className="bg-purple-600 hover:bg-purple-700">
               Voltar ao Início
             </Button>
           </Link>
@@ -92,7 +92,7 @@ export default function AdminPanel() {
                 Voltar
               </a>
             </Link>
-            <div className="flex items-center gap-2 text-amber-400 font-serif text-xl">
+            <div className="flex items-center gap-2 text-purple-300 font-serif text-xl">
               <Shield className="w-6 h-6" />
               Painel Administrativo
             </div>
@@ -195,8 +195,8 @@ export default function AdminPanel() {
                       3.2k matrículas
                     </p>
                   </div>
-                  <div className="w-12 h-12 bg-amber-500/20 rounded-full flex items-center justify-center">
-                    <BookOpen className="w-6 h-6 text-amber-400" />
+                  <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center">
+                    <BookOpen className="w-6 h-6 text-purple-400" />
                   </div>
                 </div>
               </CardContent>
@@ -253,14 +253,14 @@ export default function AdminPanel() {
                         <TableRow key={order.id} className="border-purple-500/10">
                           <TableCell className="text-white">{order.user}</TableCell>
                           <TableCell className="text-gray-400">{order.product}</TableCell>
-                          <TableCell className="text-amber-400">
+                          <TableCell className="text-purple-300">
                             R$ {order.amount.toFixed(2)}
                           </TableCell>
                           <TableCell>
                             <Badge className={
                               order.status === "completed" 
                                 ? "bg-green-500/20 text-green-400"
-                                : "bg-yellow-500/20 text-yellow-400"
+                                : "bg-purple-500/20 text-purple-400"
                             }>
                               {order.status === "completed" ? "Concluído" : "Pendente"}
                             </Badge>
@@ -321,7 +321,7 @@ export default function AdminPanel() {
                     <CardTitle className="text-white">Gestão de Usuários</CardTitle>
                     <CardDescription>Gerencie todos os usuários da plataforma</CardDescription>
                   </div>
-                  <Button className="bg-amber-500 hover:bg-amber-600">
+                  <Button className="bg-purple-600 hover:bg-purple-700">
                     Adicionar Usuário
                   </Button>
                 </div>
@@ -439,7 +439,7 @@ export default function AdminPanel() {
                     <CardTitle className="text-white">Gestão de Produtos</CardTitle>
                     <CardDescription>Gerencie produtos, cursos e serviços</CardDescription>
                   </div>
-                  <Button className="bg-amber-500 hover:bg-amber-600">
+                  <Button className="bg-purple-600 hover:bg-purple-700">
                     Adicionar Produto
                   </Button>
                 </div>

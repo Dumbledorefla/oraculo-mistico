@@ -209,3 +209,53 @@
 - [x] Atualizar VITE_AUTH0_DOMAIN no projeto Manus
 - [ ] Atualizar VITE_AUTH0_DOMAIN no Vercel (dashboard temporariamente indisponível)
 - [ ] Fazer deploy com novo domínio no Vercel
+
+## Fase 8 - Bugs Auth0
+- [ ] Corrigir fundo branco na tela de login do Auth0 (deveria ser nebulosa mística)
+- [ ] Corrigir erro piscando na tela de login do Auth0
+
+
+---
+
+## OB1 - Ajustes Globais (Prioridade Alta)
+
+### 1. Identidade Visual - Remover Amarelo Infantil
+- [ ] Remover amarelo forte de cards como cor dominante
+- [ ] Remover amarelo forte de botões como cor principal
+- [ ] Remover amarelo forte de fundos de seção
+- [ ] Aplicar paleta mística: roxo, violeta, azul escuro como cores principais
+- [ ] Usar dourado suave apenas em detalhes (ícones, divisórias, bordas finas)
+- [ ] Garantir sensação de mistério, profundidade e confiança
+
+### 2. Padronização de Dados do Usuário (Global)
+- [ ] Adicionar coleta obrigatória de nome completo em todos os métodos
+- [ ] Adicionar coleta obrigatória de data de nascimento em todos os métodos
+- [ ] Apresentar campos como primeiro passo do método
+- [ ] Em métodos de amor: adicionar campos opcionais para nome e data da outra pessoa
+- [ ] Pré-preencher dados automaticamente se usuário estiver logado
+- [ ] Permitir edição dos dados pré-preenchidos
+
+### 3. Estratégia Freemium - Upsell em Métodos Gratuitos
+- [ ] Adicionar bloco de conversão ao final de todos os métodos gratuitos
+- [ ] Incluir texto explicando versão mais profunda/completa
+- [ ] Adicionar CTA claro para método pago relacionado
+- [ ] Garantir que botão leva diretamente para método pago relevante
+
+### 4. Ajuste da Home
+- [ ] Reduzir altura do hero principal
+- [ ] Mostrar cards de métodos logo abaixo do hero (acima da dobra)
+- [ ] Destacar: Tarot, Mapa Astral/Ano, Numerologia, Consultas
+- [ ] Garantir que usuário entende variedade de métodos nos primeiros segundos
+
+### 5. Posicionamento de Métodos Pagos
+- [ ] Criar cards mais ricos para métodos pagos
+- [ ] Adicionar mais texto explicativo em métodos pagos
+- [ ] Aplicar destaque visual sutil em métodos pagos
+- [ ] Diferenciar claramente métodos pagos de gratuitos
+
+### 6. Tom de Texto e Comunicação (Global)
+- [ ] Substituir "Processamento concluído" por mensagem acolhedora
+- [ ] Substituir "Pedido confirmado" por mensagem humana
+- [ ] Substituir "Resultado gerado" por mensagem clara e simples
+- [ ] Revisar todos os textos para linguagem acolhedora, clara e simples
+- [ ] Remover juridiquês e tom robótico
