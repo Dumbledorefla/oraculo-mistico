@@ -13,7 +13,7 @@ export default function AdminConsultations() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "pending": return "bg-yellow-500/20 text-yellow-300";
+      case "pending": return "bg-orange-500/20 text-orange-300";
       case "confirmed": return "bg-blue-500/20 text-blue-300";
       case "completed": return "bg-green-500/20 text-green-300";
       case "cancelled": return "bg-red-500/20 text-red-300";

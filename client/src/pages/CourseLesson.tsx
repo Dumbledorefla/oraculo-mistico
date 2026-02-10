@@ -76,7 +76,7 @@ export default function CourseLesson() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950/20 to-gray-950 flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -104,7 +104,7 @@ export default function CourseLesson() {
             Esta aula está disponível apenas para alunos matriculados no curso.
           </p>
           <Link href={`/curso/${slug}`}>
-            <Button className="bg-amber-500 hover:bg-amber-600">
+            <Button className="bg-purple-500 hover:bg-purple-600">
               Ver Detalhes do Curso
             </Button>
           </Link>
@@ -136,7 +136,7 @@ export default function CourseLesson() {
               </Link>
             </div>
             <Link href="/">
-              <a className="flex items-center gap-2 text-amber-400 font-serif text-xl">
+              <a className="flex items-center gap-2 text-purple-400 font-serif text-xl">
                 <Sparkles className="w-6 h-6" />
                 <span className="hidden md:inline">Oráculo Místico</span>
               </a>
@@ -230,7 +230,7 @@ export default function CourseLesson() {
                   Aula Anterior
                 </Button>
                 <Button
-                  className="bg-amber-500 hover:bg-amber-600 text-white"
+                  className="bg-purple-500 hover:bg-purple-600 text-white"
                   disabled
                 >
                   Próxima Aula

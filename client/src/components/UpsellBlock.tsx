@@ -31,8 +31,8 @@ export function UpsellBlock({
         <div className="flex items-start gap-4">
           {/* Ícone de Estrela Dourada */}
           <div className="flex-shrink-0">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400/20 to-amber-600/20 flex items-center justify-center border border-amber-500/30">
-              <Sparkles className="w-6 h-6 text-amber-400" />
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400/20 to-purple-600/20 flex items-center justify-center border border-purple-500/30">
+              <Sparkles className="w-6 h-6 text-purple-400" />
             </div>
           </div>
 
@@ -52,7 +52,7 @@ export function UpsellBlock({
             <ul className="space-y-2">
               {features.map((feature, index) => (
                 <li key={index} className="flex items-start gap-2 text-sm">
-                  <span className="text-amber-400 mt-0.5">✦</span>
+                  <span className="text-purple-400 mt-0.5">✦</span>
                   <span className="text-foreground/90">{feature}</span>
                 </li>
               ))}

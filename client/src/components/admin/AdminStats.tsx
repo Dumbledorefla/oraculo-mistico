@@ -108,11 +108,11 @@ export default function AdminStats() {
             <CardTitle className="text-sm font-medium text-purple-300">
               Avaliação Média
             </CardTitle>
-            <Star className="h-4 w-4 text-yellow-400" />
+            <Star className="h-4 w-4 text-amber-400" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-white">{stats.averageRating}</div>
-            <p className="text-xs text-yellow-300 mt-1">
+            <p className="text-xs text-amber-300 mt-1">
               De 5.0 estrelas
             </p>
           </CardContent>

@@ -186,7 +186,7 @@ export default function TaromanteProfile() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950/20 to-gray-950 flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -217,7 +217,7 @@ export default function TaromanteProfile() {
               </a>
             </Link>
             <Link href="/">
-              <a className="flex items-center gap-2 text-amber-400 font-serif text-xl">
+              <a className="flex items-center gap-2 text-purple-400 font-serif text-xl">
                 <Sparkles className="w-6 h-6" />
                 Oráculo Místico
               </a>
@@ -232,7 +232,7 @@ export default function TaromanteProfile() {
           <div className="lg:col-span-2 space-y-6">
             {/* Profile Header */}
             <Card className="bg-gray-900/50 border-purple-500/20 overflow-hidden">
-              <div className="h-32 bg-gradient-to-r from-purple-900/50 to-amber-900/50" />
+              <div className="h-32 bg-gradient-to-r from-purple-900/50 to-purple-900/50" />
               <CardContent className="relative pt-0 pb-6">
                 <div className="flex flex-col md:flex-row gap-6 -mt-16">
                   <img
@@ -244,10 +244,10 @@ export default function TaromanteProfile() {
                     <div className="flex items-start justify-between">
                       <div>
                         <h1 className="text-2xl font-serif text-white">{taromante.name}</h1>
-                        <p className="text-amber-400">{taromante.title}</p>
+                        <p className="text-purple-400">{taromante.title}</p>
                       </div>
                       <div className="flex items-center gap-2 bg-gray-800/50 px-3 py-1 rounded-full">
-                        <Star className="w-5 h-5 text-amber-400" fill="currentColor" />
+                        <Star className="w-5 h-5 text-purple-400" fill="currentColor" />
                         <span className="text-white font-bold">{taromante.rating}</span>
                         <span className="text-gray-400">({taromante.totalReviews})</span>
                       </div>
@@ -307,7 +307,7 @@ export default function TaromanteProfile() {
                                 {[1, 2, 3, 4, 5].map((star) => (
                                   <Star
                                     key={star}
-                                    className={`w-4 h-4 ${star <= review.rating ? "text-amber-400" : "text-gray-600"}`}
+                                    className={`w-4 h-4 ${star <= review.rating ? "text-purple-400" : "text-gray-600"}`}
                                     fill={star <= review.rating ? "currentColor" : "none"}
                                   />
                                 ))}
@@ -334,7 +334,7 @@ export default function TaromanteProfile() {
             <Card className="bg-gray-900/50 border-purple-500/20 sticky top-24">
               <CardHeader>
                 <CardTitle className="text-white font-serif flex items-center gap-2">
-                  <Calendar className="w-5 h-5 text-amber-400" />
+                  <Calendar className="w-5 h-5 text-purple-400" />
                   Agendar Consulta
                 </CardTitle>
               </CardHeader>
@@ -349,7 +349,7 @@ export default function TaromanteProfile() {
                         onClick={() => setSelectedService(service.id)}
                         className={`p-3 rounded-lg border cursor-pointer transition-all ${
                           selectedService === service.id
-                            ? "border-amber-500 bg-amber-500/10"
+                            ? "border-purple-500 bg-purple-500/10"
                             : "border-purple-500/30 hover:border-purple-500/50"
                         }`}
                       >
@@ -359,7 +359,7 @@ export default function TaromanteProfile() {
                             <p className="text-gray-500 text-sm">{service.description}</p>
                             <p className="text-gray-400 text-sm mt-1">{service.duration} minutos</p>
                           </div>
-                          <p className="text-amber-400 font-bold">
+                          <p className="text-purple-400 font-bold">
                             R$ {parseFloat(service.price || "0").toFixed(2).replace(".", ",")}
                           </p>
                         </div>
@@ -383,7 +383,7 @@ export default function TaromanteProfile() {
                           htmlFor={type.id}
                           className={`flex flex-col items-center p-3 rounded-lg border cursor-pointer transition-all ${
                             selectedType === type.id
-                              ? "border-amber-500 bg-amber-500/10"
+                              ? "border-purple-500 bg-purple-500/10"
                               : "border-purple-500/30 hover:border-purple-500/50"
                           }`}
                         >
@@ -424,7 +424,7 @@ export default function TaromanteProfile() {
                           disabled={isPast || !hasAvailability}
                           className={`p-2 rounded-lg text-center transition-all ${
                             isSelected
-                              ? "bg-amber-500 text-white"
+                              ? "bg-purple-500 text-white"
                               : isPast || !hasAvailability
                               ? "bg-gray-800/50 text-gray-600 cursor-not-allowed"
                               : "bg-gray-800/50 text-gray-300 hover:bg-purple-500/20"
@@ -449,7 +449,7 @@ export default function TaromanteProfile() {
                           onClick={() => setSelectedTime(time)}
                           className={`p-2 rounded text-sm transition-all ${
                             selectedTime === time
-                              ? "bg-amber-500 text-white"
+                              ? "bg-purple-500 text-white"
                               : "bg-gray-800/50 text-gray-300 hover:bg-purple-500/20"
                           }`}
                         >
@@ -477,7 +477,7 @@ export default function TaromanteProfile() {
                   {selectedServiceData && (
                     <div className="flex justify-between items-center mb-4">
                       <span className="text-gray-400">Total</span>
-                      <span className="text-2xl font-bold text-amber-400">
+                      <span className="text-2xl font-bold text-purple-400">
                         R$ {parseFloat(selectedServiceData.price || "0").toFixed(2).replace(".", ",")}
                       </span>
                     </div>
@@ -485,7 +485,7 @@ export default function TaromanteProfile() {
                   <Button
                     onClick={handleBooking}
                     disabled={!selectedService || !selectedDate || !selectedTime || createCheckoutMutation.isPending}
-                    className="w-full bg-gradient-to-r from-purple-600 to-amber-600 hover:from-purple-700 hover:to-amber-700"
+                    className="w-full bg-gradient-to-r from-purple-600 to-purple-600 hover:from-purple-700 hover:to-purple-700"
                   >
                     {createCheckoutMutation.isPending ? (
                       "Consultando os astros..."

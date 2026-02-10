@@ -328,3 +328,19 @@
 - [x] Atualizar vercel.json para SPA puro
 - [ ] Testar login/logout no ambiente local
 - [ ] Fazer deploy e testar em produção
+
+## Finalização da Identidade Visual (Tarefa Atual)
+- [x] Atualizar Home.tsx (6 referências amber/yellow)
+- [x] Atualizar TaromanteProfile.tsx (14 referências amber)
+- [x] Atualizar Courses.tsx (11 referências amber)
+- [x] Atualizar CourseDetail.tsx (9 referências amber)
+- [x] Atualizar CourseLesson.tsx (4 referências amber)
+- [x] Atualizar UpsellBlock.tsx (3 referências amber)
+- [x] Atualizar StarRating.tsx (2 referências yellow - mantido dourado para estrelas)
+- [x] Atualizar AdminConsultations.tsx (status pendente yellow → orange)
+- [x] Atualizar AdminGames.tsx (badges yellow → amber para premium)
+- [x] Atualizar AdminPayments.tsx (status pendente yellow → orange)
+- [x] Atualizar AdminStats.tsx (ícones de estrela yellow → amber)
+- [x] Atualizar AdminPanel.tsx (referências amber restantes)
+- [x] Verificar consistência visual em todas as páginas
+- [x] Testar navegação e aparência geral

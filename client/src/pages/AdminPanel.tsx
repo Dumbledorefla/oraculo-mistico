@@ -404,14 +404,14 @@ export default function AdminPanel() {
                         <TableCell className="text-gray-500">#{order.id}</TableCell>
                         <TableCell className="text-white">{order.user}</TableCell>
                         <TableCell className="text-gray-400">{order.product}</TableCell>
-                        <TableCell className="text-amber-400">
+                        <TableCell className="text-purple-300">
                           R$ {order.amount.toFixed(2)}
                         </TableCell>
                         <TableCell>
                           <Badge className={
                             order.status === "completed" 
                               ? "bg-green-500/20 text-green-400"
-                              : "bg-yellow-500/20 text-yellow-400"
+                              : "bg-orange-500/20 text-orange-400"
                           }>
                             {order.status === "completed" ? "Concluído" : "Pendente"}
                           </Badge>

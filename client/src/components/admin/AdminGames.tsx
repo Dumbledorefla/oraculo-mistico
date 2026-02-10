@@ -29,7 +29,7 @@ export default function AdminGames() {
                   <div className="flex items-center gap-3">
                     <h3 className="text-white font-medium">{game.name}</h3>
                     {game.premium && (
-                      <span className="px-2 py-1 bg-yellow-500/20 text-yellow-300 text-xs rounded-full">
+                      <span className="px-2 py-1 bg-amber-500/20 text-amber-300 text-xs rounded-full">
                         Premium
                       </span>
                     )}

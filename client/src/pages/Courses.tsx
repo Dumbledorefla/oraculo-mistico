@@ -33,7 +33,7 @@ const CATEGORIES = [
 
 const LEVELS = {
   iniciante: { label: "Iniciante", color: "bg-green-500/20 text-green-400" },
-  intermediario: { label: "Intermediário", color: "bg-yellow-500/20 text-yellow-400" },
+  intermediario: { label: "Intermediário", color: "bg-blue-500/20 text-blue-400" },
   avancado: { label: "Avançado", color: "bg-red-500/20 text-red-400" },
 };
 
@@ -63,7 +63,7 @@ export default function Courses() {
               </a>
             </Link>
             <Link href="/">
-              <a className="flex items-center gap-2 text-amber-400 font-serif text-xl">
+              <a className="flex items-center gap-2 text-purple-400 font-serif text-xl">
                 <Sparkles className="w-6 h-6" />
                 Oráculo Místico
               </a>
@@ -86,7 +86,7 @@ export default function Courses() {
               Aprenda com os Mestres
             </div>
             <h1 className="text-4xl md:text-5xl font-serif text-white mb-4">
-              Cursos de <span className="text-amber-400">Autoconhecimento</span>
+              Cursos de <span className="text-purple-400">Autoconhecimento</span>
             </h1>
             <p className="text-gray-400 text-lg max-w-2xl mx-auto">
               Desenvolva suas habilidades em Tarot, Numerologia, Astrologia e muito mais 
@@ -122,7 +122,7 @@ export default function Courses() {
                   onClick={() => setSelectedCategory(cat.id)}
                   className={
                     selectedCategory === cat.id
-                      ? "bg-amber-500 hover:bg-amber-600 text-white"
+                      ? "bg-purple-500 hover:bg-purple-600 text-white"
                       : "border-purple-500/30 text-gray-400 hover:text-white hover:bg-purple-500/20"
                   }
                 >
@@ -162,7 +162,7 @@ export default function Courses() {
                     transition={{ duration: 0.4, delay: index * 0.1 }}
                   >
                     <Link href={`/curso/${course.slug}`}>
-                      <Card className="bg-gray-900/50 border-purple-500/20 hover:border-amber-500/50 transition-all duration-300 cursor-pointer group overflow-hidden h-full">
+                      <Card className="bg-gray-900/50 border-purple-500/20 hover:border-purple-500/50 transition-all duration-300 cursor-pointer group overflow-hidden h-full">
                         {/* Image */}
                         <div className="relative h-48 overflow-hidden">
                           <img
@@ -180,7 +180,7 @@ export default function Courses() {
                               </Badge>
                             )}
                             {course.isFeatured && (
-                              <Badge className="bg-amber-500/90 text-white">
+                              <Badge className="bg-purple-500/90 text-white">
                                 Destaque
                               </Badge>
                             )}
@@ -188,7 +188,7 @@ export default function Courses() {
 
                           {/* Play Button */}
                           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            <div className="w-16 h-16 bg-amber-500/90 rounded-full flex items-center justify-center">
+                            <div className="w-16 h-16 bg-purple-500/90 rounded-full flex items-center justify-center">
                               <Play className="w-8 h-8 text-white ml-1" />
                             </div>
                           </div>
@@ -201,7 +201,7 @@ export default function Courses() {
                           </Badge>
 
                           {/* Title */}
-                          <h3 className="text-xl font-serif text-white mb-2 group-hover:text-amber-400 transition-colors">
+                          <h3 className="text-xl font-serif text-white mb-2 group-hover:text-purple-400 transition-colors">
                             {course.title}
                           </h3>
 
@@ -236,7 +236,7 @@ export default function Courses() {
                             {course.isFree ? (
                               <span className="text-2xl font-bold text-green-400">Grátis</span>
                             ) : (
-                              <span className="text-2xl font-bold text-amber-400">
+                              <span className="text-2xl font-bold text-purple-400">
                                 R$ {parseFloat(course.price || "0").toFixed(2).replace(".", ",")}
                               </span>
                             )}
@@ -265,7 +265,7 @@ export default function Courses() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-purple-900/30 to-amber-900/30">
+      <section className="py-16 px-4 bg-gradient-to-r from-purple-900/30 to-purple-900/30">
         <div className="container mx-auto text-center">
           <h2 className="text-3xl font-serif text-white mb-4">
             Quer se tornar um instrutor?
@@ -274,7 +274,7 @@ export default function Courses() {
             Compartilhe seu conhecimento com milhares de pessoas e ganhe dinheiro 
             ensinando o que você ama.
           </p>
-          <Button className="bg-amber-500 hover:bg-amber-600 text-white">
+          <Button className="bg-purple-500 hover:bg-purple-600 text-white">
             Saiba Mais
           </Button>
         </div>

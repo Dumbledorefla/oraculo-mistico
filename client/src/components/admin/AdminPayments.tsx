@@ -20,7 +20,7 @@ export default function AdminPayments() {
   const getPaymentStatusColor = (status: string) => {
     switch (status) {
       case "paid": return "bg-green-500/20 text-green-300";
-      case "pending": return "bg-yellow-500/20 text-yellow-300";
+      case "pending": return "bg-orange-500/20 text-orange-300";
       case "refunded": return "bg-red-500/20 text-red-300";
       default: return "bg-gray-500/20 text-gray-300";
     }

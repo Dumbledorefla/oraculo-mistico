@@ -66,9 +66,9 @@ export function StarRating({
               className={cn(
                 sizeClasses[size],
                 isFilled
-                  ? "fill-yellow-600/80 text-yellow-600/80"
+                  ? "fill-yellow-500 text-yellow-500"
                   : isHalfFilled
-                  ? "fill-yellow-600/40 text-yellow-600/40"
+                  ? "fill-yellow-400/50 text-yellow-400/50"
                   : "fill-transparent text-gray-500"
               )}
             />

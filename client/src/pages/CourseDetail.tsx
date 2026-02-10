@@ -29,7 +29,7 @@ import { toast } from "sonner";
 
 const LEVELS = {
   iniciante: { label: "Iniciante", color: "bg-green-500/20 text-green-400" },
-  intermediario: { label: "Intermediário", color: "bg-yellow-500/20 text-yellow-400" },
+  intermediario: { label: "Intermediário", color: "bg-blue-500/20 text-blue-400" },
   avancado: { label: "Avançado", color: "bg-red-500/20 text-red-400" },
 };
 
@@ -112,7 +112,7 @@ export default function CourseDetail() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-950 via-purple-950/20 to-gray-950 flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -145,7 +145,7 @@ export default function CourseDetail() {
               </a>
             </Link>
             <Link href="/">
-              <a className="flex items-center gap-2 text-amber-400 font-serif text-xl">
+              <a className="flex items-center gap-2 text-purple-400 font-serif text-xl">
                 <Sparkles className="w-6 h-6" />
                 Oráculo Místico
               </a>
@@ -182,7 +182,7 @@ export default function CourseDetail() {
                     <Badge className="bg-green-500/90 text-white">Grátis</Badge>
                   )}
                   {course.isFeatured && (
-                    <Badge className="bg-amber-500/90 text-white">Destaque</Badge>
+                    <Badge className="bg-purple-500/90 text-white">Destaque</Badge>
                   )}
                 </div>
 
@@ -226,7 +226,7 @@ export default function CourseDetail() {
                     <span>{course.enrollmentCount || 0} alunos</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+                    <Star className="w-5 h-5 text-purple-400 fill-purple-400" />
                     <span>4.8 (120 avaliações)</span>
                   </div>
                 </div>
@@ -250,7 +250,7 @@ export default function CourseDetail() {
                         className="w-full h-full object-cover"
                       />
                       <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-                        <div className="w-16 h-16 bg-amber-500/90 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform">
+                        <div className="w-16 h-16 bg-purple-500/90 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform">
                           <Play className="w-8 h-8 text-white ml-1" />
                         </div>
                       </div>
@@ -261,7 +261,7 @@ export default function CourseDetail() {
                       {course.isFree ? (
                         <span className="text-4xl font-bold text-green-400">Grátis</span>
                       ) : (
-                        <span className="text-4xl font-bold text-amber-400">
+                        <span className="text-4xl font-bold text-purple-400">
                           R$ {parseFloat(course.price || "0").toFixed(2).replace(".", ",")}
                         </span>
                       )}
@@ -281,7 +281,7 @@ export default function CourseDetail() {
                     {/* CTA Button */}
                     {isEnrolled ? (
                       <Link href={`/curso/${slug}/aula/1`}>
-                        <Button className="w-full bg-amber-500 hover:bg-amber-600 text-white py-6 text-lg">
+                        <Button className="w-full bg-purple-500 hover:bg-purple-600 text-white py-6 text-lg">
                           <Play className="w-5 h-5 mr-2" />
                           Continuar Curso
                         </Button>
@@ -290,7 +290,7 @@ export default function CourseDetail() {
                       <Button
                         onClick={handleEnroll}
                         disabled={enrollMutation.isPending}
-                        className="w-full bg-amber-500 hover:bg-amber-600 text-white py-6 text-lg"
+                        className="w-full bg-purple-500 hover:bg-purple-600 text-white py-6 text-lg"
                       >
                         {enrollMutation.isPending ? (
                           "Matriculando..."
