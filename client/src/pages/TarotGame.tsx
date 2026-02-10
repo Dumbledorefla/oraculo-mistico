@@ -25,17 +25,25 @@ import { useSaveTarotReading } from "@/hooks/useSaveTarotReading";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { toast } from "sonner";
 import TarotPaywall from "@/components/TarotPaywall";
+import UserDataForm, { UserData } from "@/components/UserDataForm";
+import { trpc } from "@/lib/trpc";
 
-type GamePhase = "paywall" | "intro" | "spread-select" | "mentalize" | "shuffle" | "select" | "result" | "history";
+type GamePhase = "paywall" | "userData" | "intro" | "spread-select" | "mentalize" | "shuffle" | "select" | "result" | "history";
 
 interface TarotGameProps {
   gameType?: "dia" | "amor" | "completo" | "celtic" | "life-path";
 }
 
 export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { addReading, history, deleteReading } = useReadingHistory();
   const { saveReading } = useSaveTarotReading();
+  
+  // OB1: Buscar dados pessoais do usuário
+  const { data: userPersonalData } = trpc.userData.get.useQuery(undefined, {
+    enabled: isAuthenticated,
+  });
+  const updateUserDataMutation = trpc.userData.update.useMutation();
 
   const spreadId = gameType === "dia" ? "daily" : gameType === "amor" ? "love" : gameType === "completo" ? "complete" : gameType === "celtic" ? "celtic-cross" : "life-path";
   const spread = getSpreadById(spreadId);
@@ -43,7 +51,8 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
   const gameTitle = spread?.name || "Tarot";
   const isPremium = spread?.isPremium || false;
 
-  const [phase, setPhase] = useState<GamePhase>(isPremium && !isAuthenticated ? "paywall" : "intro");
+  const [phase, setPhase] = useState<GamePhase>(isPremium && !isAuthenticated ? "paywall" : "userData");
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [birthDate, setBirthDate] = useState("");
   const [userName, setUserName] = useState("");
   const [shuffledCards, setShuffledCards] = useState<TarotCard[]>([]);
@@ -57,6 +66,27 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
     const shuffled = [...majorArcana].sort(() => Math.random() - 0.5);
     setShuffledCards(shuffled);
   }, []);
+
+  // OB1: Handle user data form submission
+  const handleUserDataSubmit = async (data: UserData) => {
+    setUserData(data);
+    setUserName(data.fullName);
+    setBirthDate(data.birthDate);
+    
+    // Salvar dados no banco se usuário estiver logado
+    if (isAuthenticated) {
+      try {
+        await updateUserDataMutation.mutateAsync({
+          fullName: data.fullName,
+          birthDate: data.birthDate,
+        });
+      } catch (error) {
+        console.error("Erro ao salvar dados do usuário:", error);
+      }
+    }
+    
+    setPhase("intro");
+  };
 
   const handleStartGame = () => {
     if (!userName.trim()) {
@@ -176,7 +206,25 @@ export default function TarotGame({ gameType = "dia" }: TarotGameProps) {
             {phase === "paywall" && (
               <TarotPaywall 
                 gameName={gameTitle}
-                onUnlock={() => setPhase("intro")}
+                onUnlock={() => setPhase("userData")}
+              />
+            )}
+
+            {/* OB1: User Data Collection Phase */}
+            {phase === "userData" && (
+              <UserDataForm
+                onSubmit={handleUserDataSubmit}
+                initialData={{
+                  fullName: userPersonalData?.fullName || "",
+                  birthDate: userPersonalData?.birthDate 
+                    ? (typeof userPersonalData.birthDate === 'string' 
+                        ? userPersonalData.birthDate 
+                        : new Date(userPersonalData.birthDate).toISOString().split('T')[0])
+                    : "",
+                }}
+                isLoveMethod={gameType === "amor"}
+                title="Seus Dados Pessoais"
+                description="Para personalizar sua leitura de Tarot, precisamos de algumas informações básicas."
               />
             )}
 

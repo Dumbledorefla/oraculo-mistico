@@ -43,7 +43,9 @@ import {
   getUserEnrollments,
   getUserEnrollment,
   updateLessonProgress,
-  getUserLessonProgress
+  getUserLessonProgress,
+  updateUserPersonalData,
+  getUserPersonalData
 } from "./db";
 import { createCheckoutSession, createConsultationCheckoutSession, createCourseCheckoutSession } from "./stripe/stripe";
 import { adminRouter } from "./routers/admin";
@@ -60,6 +62,28 @@ export const appRouter = router({
         success: true,
       } as const;
     }),
+  }),
+
+  // OB1: User personal data management
+  userData: router({
+    get: protectedProcedure.query(async ({ ctx }) => {
+      if (!ctx.user?.id) {
+        throw new Error("User not authenticated");
+      }
+      return await getUserPersonalData(ctx.user.id);
+    }),
+    
+    update: protectedProcedure
+      .input(z.object({
+        fullName: z.string().min(1),
+        birthDate: z.string(), // formato: YYYY-MM-DD
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (!ctx.user?.id) {
+          throw new Error("User not authenticated");
+        }
+        return await updateUserPersonalData(ctx.user.id, input);
+      }),
   }),
 
   tarot: router({

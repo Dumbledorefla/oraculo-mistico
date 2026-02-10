@@ -24,6 +24,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { zodiacSigns, ZodiacSign, getDailyMessage } from "@/data/horoscope";
 import { toast } from "sonner";
+import UserDataForm, { UserData } from "@/components/UserDataForm";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { trpc } from "@/lib/trpc";
 
 const elementIcons = {
   "Fogo": Flame,
@@ -40,7 +43,32 @@ const elementColors = {
 };
 
 export default function Horoscope() {
+  const { isAuthenticated } = useAuth();
+  const [showUserDataForm, setShowUserDataForm] = useState(true);
   const [selectedSign, setSelectedSign] = useState<ZodiacSign | null>(null);
+  
+  // OB1: Buscar dados pessoais do usuário
+  const { data: userPersonalData } = trpc.userData.get.useQuery(undefined, {
+    enabled: isAuthenticated,
+  });
+  const updateUserDataMutation = trpc.userData.update.useMutation();
+  
+  // OB1: Handle user data form submission
+  const handleUserDataSubmit = async (data: UserData) => {
+    // Salvar dados no banco se usuário estiver logado
+    if (isAuthenticated) {
+      try {
+        await updateUserDataMutation.mutateAsync({
+          fullName: data.fullName,
+          birthDate: data.birthDate,
+        });
+      } catch (error) {
+        console.error("Erro ao salvar dados do usuário:", error);
+      }
+    }
+    
+    setShowUserDataForm(false);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -61,7 +89,22 @@ export default function Horoscope() {
 
       <main className="pt-24 pb-12 container">
         <AnimatePresence mode="wait">
-          {!selectedSign ? (
+          {/* OB1: User Data Collection Form */}
+          {showUserDataForm ? (
+            <UserDataForm
+              onSubmit={handleUserDataSubmit}
+              initialData={{
+                fullName: userPersonalData?.fullName || "",
+                birthDate: userPersonalData?.birthDate 
+                  ? (typeof userPersonalData.birthDate === 'string' 
+                      ? userPersonalData.birthDate 
+                      : new Date(userPersonalData.birthDate).toISOString().split('T')[0])
+                  : "",
+              }}
+              title="Seus Dados para Horóscopo"
+              description="Para personalizar suas previsões astrológicas, precisamos do seu nome completo e data de nascimento."
+            />
+          ) : !selectedSign ? (
             <motion.div
               key="selection"
               initial={{ opacity: 0, y: 20 }}

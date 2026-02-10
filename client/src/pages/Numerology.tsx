@@ -26,13 +26,44 @@ import {
   NumerologyResult 
 } from "@/data/numerology";
 import { toast } from "sonner";
+import UserDataForm, { UserData } from "@/components/UserDataForm";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { trpc } from "@/lib/trpc";
 
 export default function Numerology() {
+  const { isAuthenticated } = useAuth();
+  const [showUserDataForm, setShowUserDataForm] = useState(true);
   const [fullName, setFullName] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [result, setResult] = useState<NumerologyResult | null>(null);
   const [activeTab, setActiveTab] = useState<keyof NumerologyResult>("destiny");
   const [isCalculating, setIsCalculating] = useState(false);
+  
+  // OB1: Buscar dados pessoais do usuário
+  const { data: userPersonalData } = trpc.userData.get.useQuery(undefined, {
+    enabled: isAuthenticated,
+  });
+  const updateUserDataMutation = trpc.userData.update.useMutation();
+
+  // OB1: Handle user data form submission
+  const handleUserDataSubmit = async (data: UserData) => {
+    setFullName(data.fullName);
+    setBirthDate(data.birthDate);
+    
+    // Salvar dados no banco se usuário estiver logado
+    if (isAuthenticated) {
+      try {
+        await updateUserDataMutation.mutateAsync({
+          fullName: data.fullName,
+          birthDate: data.birthDate,
+        });
+      } catch (error) {
+        console.error("Erro ao salvar dados do usuário:", error);
+      }
+    }
+    
+    setShowUserDataForm(false);
+  };
 
   const handleCalculate = () => {
     if (!fullName.trim()) {
@@ -92,7 +123,22 @@ export default function Numerology() {
 
       <main className="pt-24 pb-12 container">
         <AnimatePresence mode="wait">
-          {!result ? (
+          {/* OB1: User Data Collection Form */}
+          {showUserDataForm ? (
+            <UserDataForm
+              onSubmit={handleUserDataSubmit}
+              initialData={{
+                fullName: userPersonalData?.fullName || "",
+                birthDate: userPersonalData?.birthDate 
+                  ? (typeof userPersonalData.birthDate === 'string' 
+                      ? userPersonalData.birthDate 
+                      : new Date(userPersonalData.birthDate).toISOString().split('T')[0])
+                  : "",
+              }}
+              title="Seus Dados para Numerologia"
+              description="Para calcular seu mapa numerológico, precisamos do seu nome completo e data de nascimento."
+            />
+          ) : !result ? (
             <motion.div
               key="form"
               initial={{ opacity: 0, y: 20 }}

@@ -43,6 +43,13 @@
       "when": 1770253856762,
       "tag": "0005_jittery_morlun",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1770689376698,
+      "tag": "0006_absent_sentinel",
+      "breakpoints": true
     }
   ]
 }

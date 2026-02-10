@@ -99,6 +99,39 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
+// OB1: Update user personal data (fullName, birthDate)
+export async function updateUserPersonalData(userId: number, data: { fullName?: string; birthDate?: string }) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db.update(users)
+    .set({
+      fullName: data.fullName,
+      birthDate: data.birthDate ? new Date(data.birthDate) : null,
+      updatedAt: new Date(),
+    })
+    .where(eq(users.id, userId));
+
+  return { success: true };
+}
+
+// OB1: Get user personal data
+export async function getUserPersonalData(userId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db.select({
+    fullName: users.fullName,
+    birthDate: users.birthDate,
+  }).from(users).where(eq(users.id, userId)).limit(1);
+
+  return result.length > 0 ? result[0] : null;
+}
+
 // ==================== TAROT READING QUERIES ====================
 
 export async function saveTarotReading(reading: InsertTarotReading) {

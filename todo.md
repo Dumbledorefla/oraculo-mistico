@@ -259,3 +259,55 @@
 - [ ] Substituir "Resultado gerado" por mensagem clara e simples
 - [ ] Revisar todos os textos para linguagem acolhedora, clara e simples
 - [ ] Remover juridiquês e tom robótico
+
+
+---
+
+## OB1 - Fase Atual (Implementação em Andamento)
+
+### 1.1. Identidade Visual - Cores Principais (CONCLUÍDO)
+- [x] Atualizar variável CSS --primary de amber para purple
+- [x] Atualizar TarotPaywall.tsx para paleta roxa
+- [x] Atualizar Header.tsx (logo) para paleta roxa
+- [x] Atualizar StarRating.tsx (estrelas com dourado sutil)
+- [x] Atualizar App.tsx (botão de consulta)
+- [x] Atualizar AdminPanel.tsx (todos os botões e cores)
+
+### 1.2. Identidade Visual - Páginas Secundárias (PRÓXIMO)
+- [ ] Atualizar Consultations.tsx (remover todas as referências amber)
+- [ ] Atualizar AdminConsultations.tsx (status pendente)
+- [ ] Atualizar AdminGames.tsx (badges)
+- [ ] Atualizar AdminPayments.tsx (status pendente)
+- [ ] Atualizar AdminStats.tsx (ícones de estrela)
+- [ ] Revisar todas as páginas para garantir consistência visual
+
+### 2. Coleta de Dados do Usuário (CONCLUÍDO)
+- [x] Criar componente UserDataForm.tsx (nome + data de nascimento)
+- [x] Adicionar schema no banco para armazenar nome e data de nascimento
+- [x] Integrar UserDataForm no TarotGame.tsx (antes de mostrar resultado)
+- [x] Adicionar campos opcionais de parceiro no Tarot do Amor
+- [x] Integrar UserDataForm na Numerologia
+- [x] Integrar UserDataForm no Horóscopo
+- [x] Implementar pré-preenchimento para usuários logados
+- [x] Criar tRPC endpoint para salvar/atualizar dados do usuário
+
+### 3. Blocos de Upsell Freemium (IMPLEMENTAR)
+- [ ] Criar componente UpsellBlock.tsx reutilizável
+- [ ] Adicionar UpsellBlock ao final do Tarot do Dia → link para Tarot Completo
+- [ ] Adicionar UpsellBlock ao final da Numerologia → link para Numerologia Completa
+- [ ] Adicionar UpsellBlock ao final do Horóscopo → link para Mapa Astral
+- [ ] Revisar textos (tom acolhedor: "Essa leitura gratuita oferece uma visão inicial...")
+
+### 4. Ajuste da Home (IMPLEMENTAR)
+- [ ] Reduzir altura do hero de 100vh para ~70vh
+- [ ] Criar seção MethodsGrid logo abaixo do hero
+- [ ] Adicionar 4-6 cards de métodos visíveis sem scroll
+- [ ] Cards devem incluir: Tarot, Mapa Astral, Numerologia, Consultas
+- [ ] Diferenciar visualmente métodos gratuitos vs pagos (borda, badge, etc)
+
+### 5. Tom de Comunicação (IMPLEMENTAR)
+- [ ] Revisar CheckoutSuccess.tsx (mensagens mais humanas)
+- [ ] Revisar mensagens de sucesso em consultas
+- [ ] Revisar mensagens de erro (tornar acolhedoras)
+- [ ] Revisar textos de loading/processamento
+- [ ] Buscar e substituir textos genéricos por mensagens acolhedoras
