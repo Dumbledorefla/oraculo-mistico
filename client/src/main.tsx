@@ -38,11 +38,44 @@ queryClient.getMutationCache().subscribe(event => {
   }
 });
 
+/**
+ * Get Auth0 token from localStorage.
+ * Auth0 stores tokens in localStorage when cacheLocation="localstorage" is set.
+ */
+function getAuth0Token(): string | null {
+  try {
+    // Auth0 stores tokens with a key pattern in localStorage
+    for (const key of Object.keys(localStorage)) {
+      if (key.startsWith('@@auth0spajs@@')) {
+        const data = JSON.parse(localStorage.getItem(key) || '{}');
+        if (data?.body?.id_token) {
+          return data.body.id_token;
+        }
+        if (data?.body?.access_token) {
+          return data.body.access_token;
+        }
+      }
+    }
+  } catch (e) {
+    // Silently fail
+  }
+  return null;
+}
+
 const trpcClient = trpc.createClient({
   links: [
     httpBatchLink({
       url: "/api/trpc",
       transformer: superjson,
+      headers() {
+        const token = getAuth0Token();
+        if (token) {
+          return {
+            Authorization: `Bearer ${token}`,
+          };
+        }
+        return {};
+      },
       fetch(input, init) {
         return globalThis.fetch(input, {
           ...(init ?? {}),

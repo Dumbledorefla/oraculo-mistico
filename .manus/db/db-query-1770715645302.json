@@ -1,0 +1,82 @@
+{
+  "query": "SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE();",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3L4Kz5ittB4QN9S.root --database nmRKyk2TymSALzqEHEQJLj --execute SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE();",
+  "rows": [
+    {
+      "table_name": "__drizzle_migrations"
+    },
+    {
+      "table_name": "users"
+    },
+    {
+      "table_name": "tarot_readings"
+    },
+    {
+      "table_name": "order_items"
+    },
+    {
+      "table_name": "orders"
+    },
+    {
+      "table_name": "products"
+    },
+    {
+      "table_name": "sample_accesses"
+    },
+    {
+      "table_name": "user_products"
+    },
+    {
+      "table_name": "consultation_reviews"
+    },
+    {
+      "table_name": "consultations"
+    },
+    {
+      "table_name": "taromante_availability"
+    },
+    {
+      "table_name": "taromante_services"
+    },
+    {
+      "table_name": "taromantes"
+    },
+    {
+      "table_name": "course_enrollments"
+    },
+    {
+      "table_name": "course_lessons"
+    },
+    {
+      "table_name": "course_modules"
+    },
+    {
+      "table_name": "courses"
+    },
+    {
+      "table_name": "lesson_progress"
+    },
+    {
+      "table_name": "mercado_pago_transactions"
+    },
+    {
+      "table_name": "payment_methods"
+    },
+    {
+      "table_name": "payment_proofs"
+    },
+    {
+      "table_name": "payment_settings"
+    },
+    {
+      "table_name": "pix_transactions"
+    },
+    {
+      "table_name": "webhook_logs"
+    }
+  ],
+  "messages": [],
+  "stdout": "table_name\n__drizzle_migrations\nusers\ntarot_readings\norder_items\norders\nproducts\nsample_accesses\nuser_products\nconsultation_reviews\nconsultations\ntaromante_availability\ntaromante_services\ntaromantes\ncourse_enrollments\ncourse_lessons\ncourse_modules\ncourses\nlesson_progress\nmercado_pago_transactions\npayment_methods\npayment_proofs\npayment_settings\npix_transactions\nwebhook_logs\n",
+  "stderr": "",
+  "execution_time_ms": 59
+}

@@ -1,0 +1,82 @@
+{
+  "query": "SHOW TABLES;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3L4Kz5ittB4QN9S.root --database nmRKyk2TymSALzqEHEQJLj --execute SHOW TABLES;",
+  "rows": [
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "__drizzle_migrations"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "consultation_reviews"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "consultations"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "course_enrollments"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "course_lessons"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "course_modules"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "courses"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "lesson_progress"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "mercado_pago_transactions"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "order_items"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "orders"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "payment_methods"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "payment_proofs"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "payment_settings"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "pix_transactions"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "products"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "sample_accesses"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "taromante_availability"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "taromante_services"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "taromantes"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "tarot_readings"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "user_products"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "users"
+    },
+    {
+      "Tables_in_nmRKyk2TymSALzqEHEQJLj": "webhook_logs"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_nmRKyk2TymSALzqEHEQJLj\n__drizzle_migrations\nconsultation_reviews\nconsultations\ncourse_enrollments\ncourse_lessons\ncourse_modules\ncourses\nlesson_progress\nmercado_pago_transactions\norder_items\norders\npayment_methods\npayment_proofs\npayment_settings\npix_transactions\nproducts\nsample_accesses\ntaromante_availability\ntaromante_services\ntaromantes\ntarot_readings\nuser_products\nusers\nwebhook_logs\n",
+  "stderr": "",
+  "execution_time_ms": 126
+}

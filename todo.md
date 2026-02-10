@@ -377,7 +377,27 @@
 ## Configuração de Acesso Admin (CONCLUÍDO)
 - [x] Modificar useAuth.ts para verificar email e atribuir role admin
 - [x] Configurar VITE_AUTH0_CLIENT_ID
-- [x] Adicionar link Admin no menu mobile
+- [x] Adicionar link Admin no menu mobile e desktop
 - [x] Modificar AdminDashboard para verificar email diretamente
-- [ ] Testar acesso ao painel /admin
-- [ ] Verificar permissões de admin funcionando corretamente
+- [x] Criar auth0.ts no backend para autenticar requests via token Auth0
+- [x] Modificar context.ts para aceitar Auth0 como fallback
+- [x] Enviar token Auth0 no header Authorization das requests tRPC
+- [x] Reescrever AdminPanel.tsx para usar dados reais do banco via tRPC
+- [x] Criar testes vitest para auth0.ts (6 testes passando)
+- [x] Todos os 26 testes passando
+- [x] Testar acesso ao painel /admin
+- [x] Verificar permissões de admin funcionando corretamente
+
+## Painel Admin Funcional (Tarefa Atual)
+- [ ] Analisar schema atual do banco de dados
+- [ ] Analisar componentes admin existentes
+- [ ] Criar procedures tRPC admin protegidas (adminProcedure)
+- [ ] Implementar gerenciamento de usuários (listar, banir/desbanir, alterar role, ver detalhes)
+- [ ] Implementar gerenciamento de jogos/leituras (listar, ver detalhes, filtrar por data)
+- [ ] Implementar gerenciamento de consultas (listar, aprovar/recusar, ver detalhes)
+- [ ] Implementar gerenciamento de pagamentos (listar transações reais do Stripe)
+- [ ] Implementar estatísticas reais do banco de dados
+- [ ] Implementar configurações do site editáveis (preços, textos)
+- [ ] Conectar componentes admin ao backend tRPC
+- [ ] Testar todas as funcionalidades admin
+- [ ] Fazer push para GitHub/Vercel
