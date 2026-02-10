@@ -183,7 +183,7 @@ export default function Home() {
       <Header />
 
       {/* Hero Section with mystical background */}
-      <section className="relative pt-24 pb-20 overflow-hidden z-10 min-h-[90vh] flex items-center">
+      <section className="relative pt-24 pb-12 overflow-hidden z-10 min-h-[70vh] flex items-center">
         {/* Hero background image */}
         <div 
           className="absolute inset-0 z-0"
@@ -288,12 +288,12 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Services Grid */}
-      <section className="py-24 relative z-10">
+      {/* Services Grid - Acima da dobra */}
+      <section className="py-12 relative z-10">
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-purple-950/50 to-black/70" />
         
         <div className="container relative z-10">
-          <div className="text-center mb-16">
+          <div className="text-center mb-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -337,16 +337,17 @@ export default function Home() {
                     </Card>
                   ) : (
                     <Link href={service.href}>
-                      <Card className={"h-full bg-gradient-to-br " + service.color + " backdrop-blur-md border " + service.borderColor + " hover:border-primary/50 transition-all cursor-pointer group hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]"}>
+                      <Card className={"h-full bg-gradient-to-br " + service.color + " backdrop-blur-md border " + (service.badge === "Premium" ? "border-primary/50 shadow-[0_0_20px_rgba(212,175,55,0.15)]" : service.borderColor) + " hover:border-primary/50 transition-all cursor-pointer group hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]"}>
                         <CardContent className="p-6">
                           <div className="flex items-start justify-between mb-4">
                             <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                               <Icon className={"w-6 h-6 " + service.iconColor} />
                             </div>
                             <span className={service.badge === "Premium" 
-                              ? "px-2 py-1 text-xs rounded-full bg-primary/30 text-primary border border-primary/30" 
-                              : "px-2 py-1 text-xs rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                              ? "px-3 py-1 text-xs rounded-full bg-primary/30 text-primary border border-primary/30 flex items-center gap-1 font-semibold" 
+                              : "px-3 py-1 text-xs rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium"
                             }>
+                              {service.badge === "Premium" && <Sparkles className="w-3 h-3" />}
                               {service.badge}
                             </span>
                           </div>
