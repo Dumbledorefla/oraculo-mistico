@@ -19,26 +19,26 @@ export function useAuth(options?: UseAuthOptions) {
     logout: auth0Logout,
   } = useAuth0();
 
+  // Admin emails list - these users always get admin role
+  const ADMIN_EMAILS = ['milton.contato177@gmail.com'];
+
+  // Determine role: check admin email list first, then Auth0 custom claim, then default to 'user'
+  const determineRole = (email: string | undefined): 'admin' | 'user' => {
+    if (email && ADMIN_EMAILS.includes(email)) return 'admin';
+    const claimRole = auth0User?.['https://chavedooraculo.com/role'];
+    if (claimRole === 'admin') return 'admin';
+    return 'user';
+  };
+
   // Convert Auth0 user to our user format
   const user = auth0User ? {
     id: auth0User.sub || '',
     email: auth0User.email || '',
     name: auth0User.name || '',
     picture: auth0User.picture || '',
-    // Check role from custom claim or assign admin to specific email
-    role: (
-      (auth0User['https://chavedooraculo.com/role'] as 'admin' | 'user') ||
-      (auth0User.email === 'milton.contato177@gmail.com' ? 'admin' : 'user')
-    ) as 'admin' | 'user',
+    role: determineRole(auth0User.email),
     createdAt: auth0User.updated_at || new Date().toISOString(),
   } : null;
-
-  // Debug: log user info
-  useEffect(() => {
-    if (user) {
-      console.log('[useAuth] User info:', { email: user.email, role: user.role });
-    }
-  }, [user]);
 
   const logout = async () => {
     auth0Logout({

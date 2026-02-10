@@ -18,7 +18,8 @@ import {
   BookOpen,
   ShoppingBag,
   User,
-  ChevronDown
+  ChevronDown,
+  Shield
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -131,6 +132,15 @@ export default function Header() {
                   <span className="text-primary font-semibold">{user.name || user.email?.split('@')[0]}</span>
                 </span>
               </Link>
+              {user.role === 'admin' && (
+                <Link
+                  href="/admin"
+                  className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 transition-colors"
+                >
+                  <Shield className="w-4 h-4" />
+                  Admin
+                </Link>
+              )}
               <Button 
                 size="sm" 
                 variant="outline"
@@ -237,7 +247,7 @@ export default function Header() {
                       <User className="w-5 h-5" />
                       Meu Perfil
                     </Link>
-                    {user.email === 'milton.contato177@gmail.com' && (
+                    {user.role === 'admin' && (
                       <Link
                         href="/admin"
                         className="flex items-center gap-3 px-4 py-3 text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 rounded-lg transition-colors"
