@@ -38,7 +38,7 @@ export default function Cart() {
       }
     },
     onError: (error) => {
-      toast.error("Erro ao criar sessão de pagamento: " + error.message);
+      toast.error("🔮 Não foi possível processar seu pagamento. Por favor, tente novamente.");
     },
   });
 

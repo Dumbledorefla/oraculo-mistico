@@ -210,7 +210,7 @@ export default function Catalog() {
             {isLoading ? (
               <div className="text-center py-12">
                 <Sparkles className="w-8 h-8 text-primary animate-spin mx-auto mb-4" />
-                <p className="text-white/70">Carregando produtos...</p>
+                <p className="text-white/70">✨ Preparando sua experiência mística...</p>
               </div>
             ) : products && products.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

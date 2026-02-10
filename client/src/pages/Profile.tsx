@@ -117,7 +117,7 @@ export default function Profile() {
                 <div className="inline-block animate-spin">
                   <Star className="w-8 h-8 text-primary" />
                 </div>
-                <p className="text-white/70 mt-2">Carregando histórico...</p>
+                <p className="text-white/70 mt-2">✨ Buscando suas leituras anteriores...</p>
               </div>
             ) : readings && readings.length > 0 ? (
               <div className="grid gap-4">

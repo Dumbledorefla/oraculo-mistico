@@ -139,7 +139,7 @@ export function ReviewForm({ onSubmit, isLoading, title = "Deixe sua avaliação
             : "bg-gray-700 text-gray-500 cursor-not-allowed"
         )}
       >
-        {isLoading ? "Enviando..." : "Enviar Avaliação"}
+        {isLoading ? "✨ Enviando sua avaliação..." : "Enviar Avaliação"}
       </button>
     </form>
   );

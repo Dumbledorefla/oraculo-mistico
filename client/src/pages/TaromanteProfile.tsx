@@ -88,11 +88,11 @@ export default function TaromanteProfile() {
     onSuccess: (data) => {
       if (data.url) {
         window.open(data.url, "_blank");
-        toast.success("Redirecionando para pagamento...");
+        toast.success("✨ Preparando sua consulta mística...");
       }
     },
     onError: (error) => {
-      toast.error("Erro ao criar sessão de pagamento: " + error.message);
+      toast.error("🔮 Não foi possível agendar sua consulta. Por favor, tente novamente.");
     },
   });
 
@@ -488,7 +488,7 @@ export default function TaromanteProfile() {
                     className="w-full bg-gradient-to-r from-purple-600 to-amber-600 hover:from-purple-700 hover:to-amber-700"
                   >
                     {createCheckoutMutation.isPending ? (
-                      "Processando..."
+                      "Consultando os astros..."
                     ) : isAuthenticated ? (
                       "Confirmar e Pagar"
                     ) : (
