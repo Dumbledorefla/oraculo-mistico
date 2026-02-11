@@ -48,10 +48,10 @@ queryClient.getMutationCache().subscribe(event => {
 function getAuth0IdToken(): string | null {
   try {
     // Auth0 stores tokens with a key pattern: @@auth0spajs@@::CLIENT_ID::@@user@@
+    // The @@user@@ key contains the id_token which has user claims (email, name, etc.)
     for (const key of Object.keys(localStorage)) {
-      if (key.startsWith('@@auth0spajs@@')) {
+      if (key.includes('@@auth0spajs@@') && key.includes('@@user@@')) {
         const data = JSON.parse(localStorage.getItem(key) || '{}');
-        // Try id_token first (preferred for backend authentication)
         if (data?.body?.id_token) {
           return data.body.id_token;
         }
