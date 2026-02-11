@@ -8,6 +8,8 @@ import App from "./App";
 import { getLoginUrl } from "./const";
 import { AuthProvider } from "./contexts/AuthProvider";
 import "./index.css";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect, useState } from "react";
 
 const queryClient = new QueryClient();
 
@@ -39,59 +41,61 @@ queryClient.getMutationCache().subscribe(event => {
 });
 
 /**
- * Get Auth0 token from localStorage.
- * Auth0 stores tokens in localStorage when cacheLocation="localstorage" is set.
+ * TRPCProvider component that wraps the app with tRPC client.
+ * Uses useAuth0() to get the token dynamically.
  */
-function getAuth0Token(): string | null {
-  try {
-    // Auth0 stores tokens with a key pattern in localStorage
-    for (const key of Object.keys(localStorage)) {
-      if (key.startsWith('@@auth0spajs@@')) {
-        const data = JSON.parse(localStorage.getItem(key) || '{}');
-        if (data?.body?.id_token) {
-          return data.body.id_token;
-        }
-        if (data?.body?.access_token) {
-          return data.body.access_token;
-        }
-      }
-    }
-  } catch (e) {
-    // Silently fail
-  }
-  return null;
-}
+function TRPCProvider({ children }: { children: React.ReactNode }) {
+  const { getAccessTokenSilently, isAuthenticated, isLoading } = useAuth0();
+  const [trpcClient, setTrpcClient] = useState<ReturnType<typeof trpc.createClient> | null>(null);
 
-const trpcClient = trpc.createClient({
-  links: [
-    httpBatchLink({
-      url: "/api/trpc",
-      transformer: superjson,
-      headers() {
-        const token = getAuth0Token();
-        if (token) {
-          return {
-            Authorization: `Bearer ${token}`,
-          };
-        }
-        return {};
-      },
-      fetch(input, init) {
-        return globalThis.fetch(input, {
-          ...(init ?? {}),
-          credentials: "include",
-        });
-      },
-    }),
-  ],
-});
+  useEffect(() => {
+    const client = trpc.createClient({
+      links: [
+        httpBatchLink({
+          url: "/api/trpc",
+          transformer: superjson,
+          async headers() {
+            if (isAuthenticated && !isLoading) {
+              try {
+                const token = await getAccessTokenSilently();
+                return {
+                  Authorization: `Bearer ${token}`,
+                };
+              } catch (error) {
+                console.error("[Auth0] Failed to get token:", error);
+              }
+            }
+            return {};
+          },
+          fetch(input, init) {
+            return globalThis.fetch(input, {
+              ...(init ?? {}),
+              credentials: "include",
+            });
+          },
+        }),
+      ],
+    });
+    setTrpcClient(client);
+  }, [isAuthenticated, isLoading, getAccessTokenSilently]);
+
+  if (!trpcClient) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        {children}
+      </QueryClientProvider>
+    </trpc.Provider>
+  );
+}
 
 createRoot(document.getElementById("root")!).render(
   <AuthProvider>
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
-    </trpc.Provider>
+    <TRPCProvider>
+      <App />
+    </TRPCProvider>
   </AuthProvider>
 );
