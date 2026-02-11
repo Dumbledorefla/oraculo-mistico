@@ -11,7 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, "..");
 
 await esbuild.build({
-  entryPoints: [path.join(projectRoot, "api/index.ts")],
+  entryPoints: [path.join(projectRoot, "scripts/api-source.ts")],
   bundle: true,
   platform: "node",
   target: "node20",
