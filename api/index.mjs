@@ -44528,7 +44528,7 @@ var require_dist2 = __commonJS({
   );
 })();
 
-// api/index.ts
+// scripts/api-source.ts
 var import_express = __toESM(require_express2(), 1);
 
 // node_modules/.pnpm/@trpc+server@11.9.0_typescript@5.9.3/node_modules/@trpc/server/dist/codes-DagpWZLc.mjs
@@ -79810,7 +79810,7 @@ async function handleStripeWebhook(body, signature) {
   }
 }
 
-// api/index.ts
+// scripts/api-source.ts
 var app = (0, import_express.default)();
 app.post("/api/stripe/webhook", import_express.default.raw({ type: "application/json" }), async (req, res) => {
   const signature = req.headers["stripe-signature"];
@@ -79878,9 +79878,9 @@ app.use(
     createContext
   })
 );
-var index_default = app;
+var api_source_default = app;
 export {
-  index_default as default
+  api_source_default as default
 };
 /*! Bundled license information:
 
