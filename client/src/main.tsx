@@ -8,8 +8,6 @@ import App from "./App";
 import { getLoginUrl } from "./const";
 import { AuthProvider } from "./contexts/AuthProvider";
 import "./index.css";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect, useState } from "react";
 
 const queryClient = new QueryClient();
 
@@ -41,61 +39,60 @@ queryClient.getMutationCache().subscribe(event => {
 });
 
 /**
- * TRPCProvider component that wraps the app with tRPC client.
- * Uses useAuth0() to get the token dynamically.
+ * Get Auth0 ID token from localStorage.
+ * Auth0 stores tokens in localStorage when cacheLocation="localstorage" is set.
+ * 
+ * IMPORTANT: We need the ID token (not access token) because it contains user claims (email, name, etc.)
+ * that the backend uses to authenticate and create/update users.
  */
-function TRPCProvider({ children }: { children: React.ReactNode }) {
-  const { getAccessTokenSilently, isAuthenticated, isLoading } = useAuth0();
-  const [trpcClient, setTrpcClient] = useState<ReturnType<typeof trpc.createClient> | null>(null);
-
-  useEffect(() => {
-    const client = trpc.createClient({
-      links: [
-        httpBatchLink({
-          url: "/api/trpc",
-          transformer: superjson,
-          async headers() {
-            if (isAuthenticated && !isLoading) {
-              try {
-                const token = await getAccessTokenSilently();
-                return {
-                  Authorization: `Bearer ${token}`,
-                };
-              } catch (error) {
-                console.error("[Auth0] Failed to get token:", error);
-              }
-            }
-            return {};
-          },
-          fetch(input, init) {
-            return globalThis.fetch(input, {
-              ...(init ?? {}),
-              credentials: "include",
-            });
-          },
-        }),
-      ],
-    });
-    setTrpcClient(client);
-  }, [isAuthenticated, isLoading, getAccessTokenSilently]);
-
-  if (!trpcClient) {
-    return <div>Loading...</div>;
+function getAuth0IdToken(): string | null {
+  try {
+    // Auth0 stores tokens with a key pattern: @@auth0spajs@@::CLIENT_ID::@@user@@
+    for (const key of Object.keys(localStorage)) {
+      if (key.startsWith('@@auth0spajs@@')) {
+        const data = JSON.parse(localStorage.getItem(key) || '{}');
+        // Try id_token first (preferred for backend authentication)
+        if (data?.body?.id_token) {
+          return data.body.id_token;
+        }
+      }
+    }
+  } catch (e) {
+    console.error('[Auth0] Failed to get token from localStorage:', e);
   }
-
-  return (
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        {children}
-      </QueryClientProvider>
-    </trpc.Provider>
-  );
+  return null;
 }
+
+const trpcClient = trpc.createClient({
+  links: [
+    httpBatchLink({
+      url: "/api/trpc",
+      transformer: superjson,
+      headers() {
+        const token = getAuth0IdToken();
+        if (token) {
+          return {
+            Authorization: `Bearer ${token}`,
+          };
+        }
+        return {};
+      },
+      fetch(input, init) {
+        return globalThis.fetch(input, {
+          ...(init ?? {}),
+          credentials: "include",
+        });
+      },
+    }),
+  ],
+});
 
 createRoot(document.getElementById("root")!).render(
   <AuthProvider>
-    <TRPCProvider>
-      <App />
-    </TRPCProvider>
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
+    </trpc.Provider>
   </AuthProvider>
 );
