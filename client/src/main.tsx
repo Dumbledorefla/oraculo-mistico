@@ -39,21 +39,21 @@ queryClient.getMutationCache().subscribe(event => {
 });
 
 /**
- * Get Auth0 ID token from localStorage.
+ * Get Auth0 access token from localStorage.
  * Auth0 stores tokens in localStorage when cacheLocation="localstorage" is set.
  * 
- * IMPORTANT: We need the ID token (not access token) because it contains user claims (email, name, etc.)
- * that the backend uses to authenticate and create/update users.
+ * We use the access_token because the Auth0 configuration doesn't return id_token.
+ * The backend will decode the access token to get user information.
  */
 function getAuth0IdToken(): string | null {
   try {
-    // Auth0 stores tokens with a key pattern: @@auth0spajs@@::CLIENT_ID::@@user@@
-    // The @@user@@ key contains the id_token which has user claims (email, name, etc.)
+    // Auth0 stores tokens with a key pattern: @@auth0spajs@@::CLIENT_ID::default::scope
+    // Look for the key that contains access_token
     for (const key of Object.keys(localStorage)) {
-      if (key.includes('@@auth0spajs@@') && key.includes('@@user@@')) {
+      if (key.includes('@@auth0spajs@@') && !key.includes('@@user@@')) {
         const data = JSON.parse(localStorage.getItem(key) || '{}');
-        if (data?.body?.id_token) {
-          return data.body.id_token;
+        if (data?.body?.access_token) {
+          return data.body.access_token;
         }
       }
     }
