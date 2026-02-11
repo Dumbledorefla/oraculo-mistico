@@ -4,7 +4,7 @@
   "framework": "vite",
   "public": true,
   "functions": {
-    "api/index.ts": {
+    "api/index.mjs": {
       "maxDuration": 30
     }
   },

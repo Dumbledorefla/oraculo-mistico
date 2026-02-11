@@ -1,9 +1,9 @@
 import "dotenv/config";
 import express from "express";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { appRouter } from "../server/routers";
-import { createContext } from "../server/_core/context";
-import { handleStripeWebhook } from "../server/stripe/webhook-handler";
+import { appRouter } from "../server/routers.js";
+import { createContext } from "../server/_core/context.js";
+import { handleStripeWebhook } from "../server/stripe/webhook-handler.js";
 
 const app = express();
 
