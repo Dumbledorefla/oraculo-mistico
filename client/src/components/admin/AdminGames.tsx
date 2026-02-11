@@ -1,16 +1,34 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BarChart, Eye, EyeOff } from "lucide-react";
+import { BarChart, Eye, EyeOff, Loader2 } from "lucide-react";
+import { trpc } from "@/lib/trpc";
 
 export default function AdminGames() {
-  // TODO: Buscar dados reais do backend
-  const games = [
-    { id: 1, name: "Tarot do Dia", plays: 523, active: true, premium: false },
-    { id: 2, name: "Tarot do Amor", plays: 342, active: true, premium: true },
-    { id: 3, name: "Tarot Completo", plays: 189, active: true, premium: true },
-    { id: 4, name: "Numerologia", plays: 267, active: true, premium: false },
-    { id: 5, name: "Horóscopo", plays: 445, active: true, premium: false },
-  ];
+  const { data: games, isLoading, error } = trpc.admin.listGames.useQuery();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-purple-400" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+        <p className="text-red-400">Erro ao carregar jogos: {error.message}</p>
+      </div>
+    );
+  }
+
+  if (!games || games.length === 0) {
+    return (
+      <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4">
+        <p className="text-yellow-400">Nenhum jogo encontrado</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -60,6 +78,8 @@ export default function AdminGames() {
                         ? "text-red-300 hover:bg-red-500/20" 
                         : "text-green-300 hover:bg-green-500/20"
                     }`}
+                    disabled
+                    title="Funcionalidade em desenvolvimento"
                   >
                     {game.active ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </Button>
